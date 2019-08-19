@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class User {
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -17,10 +17,10 @@ public class User {
     @OneToMany(mappedBy = "playerTwo")
     private List<Game> gamesPlayerTwo;
 
-    public User() {
+    public Users() {
     }
 
-    public User(String username) {
+    public Users(String username) {
         this.username = username;
     }
 

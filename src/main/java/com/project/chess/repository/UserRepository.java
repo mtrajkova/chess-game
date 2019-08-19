@@ -1,9 +1,7 @@
 package com.project.chess.repository;
 
-import com.project.chess.model.User;
+import com.project.chess.model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
-
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<Users, Long> {
 }

@@ -1,5 +1,7 @@
 package com.project.chess.model;
 
+import org.apache.catalina.User;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -10,9 +12,9 @@ public class Game {
     private Long id;
 
     @ManyToOne
-    private User playerOne;
+    private Users playerOne;
     @ManyToOne
-    private User playerTwo;
+    private Users playerTwo;
     private String status;
     private Date startedDate;
     private Color playerOneColor;
@@ -20,11 +22,18 @@ public class Game {
     public Game() {
     }
 
-    public Game(User playerOne, User playerTwo, String status, Date startedDate, Color playerOneColor) {
+    public Game(Users playerOne, Users playerTwo, String status, Date startedDate, Color playerOneColor) {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         this.status = status;
         this.startedDate = startedDate;
+        this.playerOneColor = playerOneColor;
+    }
+
+    public Game(Users playerOne, Users playerTwo, String status, Color playerOneColor) {
+        this.playerOne = playerOne;
+        this.playerTwo = playerTwo;
+        this.status = status;
         this.playerOneColor = playerOneColor;
     }
 
@@ -36,19 +45,19 @@ public class Game {
         this.id = id;
     }
 
-    public User getPlayerOne() {
+    public Users getPlayerOne() {
         return playerOne;
     }
 
-    public void setPlayerOne(User playerOne) {
+    public void setPlayerOne(Users playerOne) {
         this.playerOne = playerOne;
     }
 
-    public User getPlayerTwo() {
+    public Users getPlayerTwo() {
         return playerTwo;
     }
 
-    public void setPlayerTwo(User playerTwo) {
+    public void setPlayerTwo(Users playerTwo) {
         this.playerTwo = playerTwo;
     }
 
