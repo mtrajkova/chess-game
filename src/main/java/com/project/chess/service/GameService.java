@@ -5,6 +5,7 @@ import com.project.chess.model.Game;
 import java.util.List;
 
 public interface GameService {
+
     Game getGameById(Long id);
 
     List<Game> getAllGamesByUser(Long userId);
@@ -13,3 +14,4 @@ public interface GameService {
 
     Game updateGameStatus(String newStatus, Long id);
 }
+

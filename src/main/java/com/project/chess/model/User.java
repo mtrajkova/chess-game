@@ -1,9 +1,7 @@
 package com.project.chess.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class User {
@@ -12,6 +10,12 @@ public class User {
     private Long id;
 
     private String username;
+
+    @OneToMany(mappedBy = "playerOne")
+    private List<Game> gamesPlayerOne;
+
+    @OneToMany(mappedBy = "playerTwo")
+    private List<Game> gamesPlayerTwo;
 
     public User() {
     }
