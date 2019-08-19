@@ -1,8 +1,13 @@
 package com.project.chess.model;
 
+import lombok.AllArgsConstructor;
+import lombok.experimental.Wither;
+
 import javax.persistence.*;
 import java.util.List;
 
+@Wither
+@AllArgsConstructor
 @Entity
 public class Users {
     @Id

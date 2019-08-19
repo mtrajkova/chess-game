@@ -1,10 +1,13 @@
 package com.project.chess.model;
 
-import org.apache.catalina.User;
+import lombok.AllArgsConstructor;
+import lombok.experimental.Wither;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@Wither
+@AllArgsConstructor
 @Entity
 public class Game {
     @Id
@@ -34,6 +37,7 @@ public class Game {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         this.status = status;
+        this.startedDate = new Date();
         this.playerOneColor = playerOneColor;
     }
 
