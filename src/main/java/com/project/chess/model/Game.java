@@ -1,7 +1,5 @@
 package com.project.chess.model;
 
-import org.apache.catalina.User;
-
 import javax.persistence.*;
 import java.util.Date;
 

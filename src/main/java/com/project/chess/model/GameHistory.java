@@ -12,8 +12,6 @@ public class GameHistory {
     @OneToOne
     private Game game;
 
-//    private List<String> statesAsFEN;
-
     public Long getId() {
         return id;
     }
@@ -29,12 +27,5 @@ public class GameHistory {
     public void setGame(Game game) {
         this.game = game;
     }
-//
-//    public List<String> getStatesAsFEN() {
-//        return statesAsFEN;
-//    }
-//
-//    public void setStatesAsFEN(List<String> statesAsFEN) {
-//        this.statesAsFEN = statesAsFEN;
-//    }
+
 }
