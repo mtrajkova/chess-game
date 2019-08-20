@@ -1,7 +1,7 @@
 package com.project.chess.model;
 
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class GameHistory {
@@ -10,6 +10,7 @@ public class GameHistory {
     private Long id;
 
     @OneToOne
+    @NotNull
     private Game game;
 
     public Long getId() {
