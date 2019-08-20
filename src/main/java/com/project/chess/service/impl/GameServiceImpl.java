@@ -25,6 +25,8 @@ public class GameServiceImpl implements GameService {
                 .orElseThrow(() -> new GameNotFoundException("Game " + id + " does not exist!"));
     }
 
+    //Socket or SSE
+
     @Override
     public List<Game> getAllGamesByUser(Long userId) {
         return gameRepository.findAllByPlayerOneIdOrPlayerTwoId(userId, userId);
