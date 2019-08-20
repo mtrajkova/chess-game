@@ -1,4 +1,4 @@
-package com.project.chess.Conterollers;
+package com.project.chess.controller;
 
 import com.project.chess.model.Game;
 import com.project.chess.service.GameService;
