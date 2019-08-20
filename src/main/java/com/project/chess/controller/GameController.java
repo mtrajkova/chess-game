@@ -32,7 +32,7 @@ public class GameController {
     }
 
     @PostMapping(value = "/game/newGame")
-    public ResponseEntity<?> sendRequestForGame(@RequestBody Game game){
+    public ResponseEntity<?> sendRequestForGame(@RequestBody Game game) {
 
         Game createdGame = gameService.createGame(game);
 
@@ -40,9 +40,9 @@ public class GameController {
     }
 
     @PutMapping(value = "/game/update-status")
-    public  ResponseEntity<?> updateGameStatus(@RequestParam(value = "id") Long id, @RequestParam(value = "status") String status){
+    public ResponseEntity<?> updateGameStatus(@RequestParam(value = "id") Long id, @RequestParam(value = "status") String status) {
 
-        Game updatedGame = gameService.updateGameStatus(status,id);
+        Game updatedGame = gameService.updateGameStatus(status, id);
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
