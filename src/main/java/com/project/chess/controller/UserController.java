@@ -36,12 +36,11 @@ public class UserController {
             for (FieldError error : errors ) {
                 System.out.println (error.getObjectName() + " - " + error.getDefaultMessage());
             }
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.toString());
         }
-
-
+        
         Users createdUser = userService.createUser(user);
-        return new ResponseEntity<Users>(createdUser, HttpStatus.CREATED);
+        return  ResponseEntity.status(HttpStatus.OK).body(createdUser);
     }
 
 }
