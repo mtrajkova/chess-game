@@ -2,13 +2,13 @@ package com.project.chess.model.dto;
 
 public class ActiveUserDto {
     private String displayName;
-    private boolean isActive;
+    private boolean isLoggedIn;
 
     public String getDisplayName() {
         return displayName;
     }
 
-    public boolean isActive() {
-        return isActive;
+    public boolean isLoggedIn() {
+        return isLoggedIn;
     }
 }
