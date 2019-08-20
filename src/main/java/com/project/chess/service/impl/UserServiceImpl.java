@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
         Users forEditing = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("The user with username " + username + " does not exist"));
 
-        forEditing.setLogged_in(status);
+        forEditing.setLoggedIn(status);
         userRepository.save(forEditing);
         return forEditing;
     }
