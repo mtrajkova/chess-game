@@ -3,6 +3,7 @@ package com.project.chess.service.impl;
 import com.project.chess.exception.GameNotFoundException;
 import com.project.chess.model.Game;
 import com.project.chess.repository.GameRepository;
+import com.project.chess.repository.UserRepository;
 import com.project.chess.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class GameServiceImpl implements GameService {
     @Autowired
     public GameServiceImpl(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
+
     }
 
     @Override

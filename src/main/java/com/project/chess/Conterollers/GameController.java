@@ -31,4 +31,14 @@ public class GameController {
         return new ResponseEntity<>(returnedGame, HttpStatus.OK);
     }
 
+    @PostMapping(value = "/game/newGame")
+    public ResponseEntity<?> sendRequestForGame(@RequestBody Game game){
+
+        Game createdGame = gameService.createGame(game);
+
+        return new ResponseEntity<>(createdGame,HttpStatus.OK);
+    }
+
+
+
 }
