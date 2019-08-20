@@ -18,12 +18,17 @@ public class Game {
     @ManyToOne
     @NotNull
     private Users playerOne;
+
     @ManyToOne
     @NotNull
     private Users playerTwo;
+
     private String status;
     private Date startedDate;
     private Color playerOneColor;
+
+    @ManyToOne
+    private State lastState;
 
     public Game() {
     }
@@ -41,6 +46,14 @@ public class Game {
         this.playerTwo = playerTwo;
         this.status = status;
         this.playerOneColor = playerOneColor;
+    }
+
+    public State getLastState() {
+        return lastState;
+    }
+
+    public void setLastState(State lastState) {
+        this.lastState = lastState;
     }
 
     public Long getId() {
