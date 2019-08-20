@@ -38,7 +38,7 @@ public class UserController {
             }
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.toString());
         }
-        
+
         Users createdUser = userService.createUser(user);
         return  ResponseEntity.status(HttpStatus.OK).body(createdUser);
     }
