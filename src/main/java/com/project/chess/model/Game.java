@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.Wither;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Wither
@@ -15,8 +16,10 @@ public class Game {
     private Long id;
 
     @ManyToOne
+    @NotNull
     private Users playerOne;
     @ManyToOne
+    @NotNull
     private Users playerTwo;
     private String status;
     private Date startedDate;
