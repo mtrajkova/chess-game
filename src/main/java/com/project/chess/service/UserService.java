@@ -12,9 +12,11 @@ public interface UserService {
 
     Users createUser(Users newUser);
 
-    Users deleteUser(Long id);
+    Users deleteUser(String username);
 
-    Users updateUserActivityStatus(Long id, boolean status);
+    Users getUserByUsername(String username);
 
-    Set<Users> getAllUsersExceptMe(Long myId);
+    Users updateUserActivityStatus(String username, boolean status);
+
+    Set<Users> getAllUsersExceptMe(String myUsername);
 }
