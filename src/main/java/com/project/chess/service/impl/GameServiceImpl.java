@@ -32,7 +32,6 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Game createGame(Game game) {
-        //todo check if players exist
         return gameRepository.save(game);
     }
 

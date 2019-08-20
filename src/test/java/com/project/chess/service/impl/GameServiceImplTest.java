@@ -25,8 +25,6 @@ public class GameServiceImplTest {
     @Mock
     private GameRepository gameRepository;
 
-    //TODO UserRepositoryMock for checking if players exist
-
     @InjectMocks
     private GameServiceImpl gameService;
 
