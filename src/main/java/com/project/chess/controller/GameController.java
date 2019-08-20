@@ -36,9 +36,16 @@ public class GameController {
 
         Game createdGame = gameService.createGame(game);
 
-        return new ResponseEntity<>(createdGame,HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PutMapping(value = "/game/update-status")
+    public  ResponseEntity<?> updateGameStatus(@RequestParam(value = "id") Long id, @RequestParam(value = "status") String status){
+
+        Game updatedGame = gameService.updateGameStatus(status,id);
+        return new ResponseEntity<>(HttpStatus.OK);
+
+    }
 
 
 }
