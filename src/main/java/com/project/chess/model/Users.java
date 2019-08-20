@@ -15,7 +15,7 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Email
+    @Email(message = "Email is not valid")
     @Column(unique = true)
     private String username;
 
