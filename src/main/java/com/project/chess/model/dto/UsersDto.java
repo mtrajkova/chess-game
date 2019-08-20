@@ -1,5 +1,6 @@
 package com.project.chess.model.dto;
 
+import com.project.chess.model.Users;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,12 @@ public class UsersDto {
     private String username;
     private String password;
     private String displayName;
+
+    public UsersDto(Users user) {
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.displayName = user.getDisplayName();
+    }
 
     public String getUsername() {
         return username;
