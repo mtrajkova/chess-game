@@ -5,6 +5,7 @@ import lombok.experimental.Wither;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Wither
@@ -17,14 +18,17 @@ public class Users {
 
     @Email(message = "Email is not valid")
     @Column(unique = true)
+    @NotEmpty(message = "Email can not be empty")
     private String username;
 
     @Column(unique = true)
-    private String display_name;
+    @NotEmpty(message = "Display name can not be empty")
+    private String displayName;
 
+    @NotEmpty(message = "Password can not be empty")
     private String password;
 
-    private boolean logged_in;
+    private boolean loggedIn;
 
     @OneToMany(mappedBy = "playerOne")
     private List<Game> gamesPlayerOne;
@@ -37,9 +41,9 @@ public class Users {
 
     public Users(@Email String email, String display_name, String password, boolean status) {
         this.username = email;
-        this.display_name = display_name;
+        this.displayName = display_name;
         this.password = password;
-        this.logged_in = status;
+        this.loggedIn = status;
     }
 
     public Long getId() {
@@ -58,12 +62,12 @@ public class Users {
         this.username = username;
     }
 
-    public String getDisplay_name() {
-        return display_name;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setDisplay_name(String display_name) {
-        this.display_name = display_name;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getPassword() {
@@ -74,11 +78,11 @@ public class Users {
         this.password = password;
     }
 
-    public boolean isLogged_in() {
-        return logged_in;
+    public boolean isLoggedIn() {
+        return loggedIn;
     }
 
-    public void setLogged_in(boolean logged_in) {
-        this.logged_in = logged_in;
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
     }
 }
