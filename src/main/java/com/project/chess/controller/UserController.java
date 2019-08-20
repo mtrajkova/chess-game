@@ -14,6 +14,7 @@ import com.project.chess.service.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @CrossOrigin(origins = "*")
@@ -32,13 +33,10 @@ public class UserController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody Users user, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError error : errors ) {
-                System.out.println (error.getObjectName() + " - " + error.getDefaultMessage());
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.toString());
+            List<String> fieldErrors = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.toList());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(fieldErrors);
         }
-        
+
         Users createdUser = userService.createUser(user);
         return  ResponseEntity.status(HttpStatus.OK).body(createdUser);
     }
