@@ -32,11 +32,7 @@ public class UserController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody Users user, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError error : errors ) {
-                System.out.println (error.getObjectName() + " - " + error.getDefaultMessage());
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.toString());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getFieldError().getDefaultMessage());
         }
 
         Users createdUser = userService.createUser(user);
