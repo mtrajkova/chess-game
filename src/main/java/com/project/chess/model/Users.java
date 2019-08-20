@@ -5,6 +5,7 @@ import lombok.experimental.Wither;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Wither
@@ -17,11 +18,14 @@ public class Users {
 
     @Email(message = "Email is not valid")
     @Column(unique = true)
+    @NotEmpty(message = "Email can not be empty")
     private String username;
 
     @Column(unique = true)
+    @NotEmpty(message = "Display name can not be empty")
     private String display_name;
 
+    @NotEmpty(message = "Password can not be empty")
     private String password;
 
     private boolean logged_in;
