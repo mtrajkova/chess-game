@@ -6,6 +6,7 @@ import com.project.chess.model.Users;
 import com.project.chess.repository.UserRepository;
 import com.project.chess.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,11 +16,12 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-//    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -30,22 +32,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public Users getUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("The user with id " + id + " does not exist"));
+                .orElseThrow(() -> new UserNotFoundException("The user with id: " + id + " does not exist"));
     }
 
     @Override
     public Users createUser(Users newUser) {
         if (userRepository.findByUsername(newUser.getUsername()).isPresent()) {
-            throw new UserAlreadyExistsException("The user with username " + newUser.getUsername() + " already exists");
+            throw new UserAlreadyExistsException("The user with username: " + newUser.getUsername() + " already exists");
         }
-//        newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
+        if (userRepository.findByDisplayName(newUser.getDisplayName()).isPresent()) {
+            throw new UserAlreadyExistsException("The user with display name: " + newUser.getDisplayName() + " already exists");
+        }
+        newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
         return userRepository.save(newUser);
     }
 
     @Override
     public Users deleteUser(String username) {
         Users toBeDeleted = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("The user with username " + username + " does not exist"));
+                .orElseThrow(() -> new UserNotFoundException("The user with username: " + username + " does not exist"));
 
         userRepository.delete(toBeDeleted);
         return toBeDeleted;
@@ -54,13 +59,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public Users getUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("The user with username " + username + " does not exist"));
+                .orElseThrow(() -> new UserNotFoundException("The user with username: " + username + " does not exist"));
     }
 
     @Override
     public Users updateUserActivityStatus(String username, boolean status) {
         Users forEditing = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("The user with username " + username + " does not exist"));
+                .orElseThrow(() -> new UserNotFoundException("The user with username: " + username + " does not exist"));
 
         forEditing.setLoggedIn(status);
         userRepository.save(forEditing);
