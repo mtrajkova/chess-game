@@ -3,6 +3,7 @@ package com.project.chess.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "game_history")
@@ -22,6 +23,8 @@ public class GameHistory {
             inverseJoinColumns = {@JoinColumn(name = "state_id")}
     )
     private List<State> states;
+
+    private Map<Integer, State> orderedStates;
 
     public Long getId() {
         return id;
