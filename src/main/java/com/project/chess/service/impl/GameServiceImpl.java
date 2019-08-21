@@ -52,7 +52,7 @@ public class GameServiceImpl implements GameService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return game;
     }
 
     @Override
