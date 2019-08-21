@@ -3,6 +3,7 @@ package com.project.chess.controller;
 import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
 import com.project.chess.model.dto.MoveResponseDto;
 import com.project.chess.service.GameService;
+import com.project.chess.service.PlayGameService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/play")
 public class PlayGameController {
-    private final GameService gameService;
+    private final PlayGameService gameService;
 
-    public PlayGameController(GameService gameService) {
+    public PlayGameController(PlayGameService gameService) {
         this.gameService = gameService;
     }
 

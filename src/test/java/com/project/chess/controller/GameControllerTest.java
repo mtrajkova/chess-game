@@ -109,18 +109,18 @@ public class GameControllerTest {
                 .andExpect(jsonPath("$[1].playerOneColor").value(game3.getPlayerOneColor().toString()));
     }
 
-//    @Test
-//    public void sendRequestForGame() throws Exception {
-//
-//        userRepository.save(user2);
-//        userRepository.save(user3);
-//
-//        mockMvc.perform(post("/game/new")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(objectMapper.writeValueAsString(game3))
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isCreated());
-//    }
+    @Test
+    public void sendRequestForGame() throws Exception {
+
+        userRepository.save(user2);
+        userRepository.save(user3);
+
+        mockMvc.perform(post("/game/new")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(game3))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+    }
 
     @Test
     public void updateGameStatus() throws Exception {

@@ -1,6 +1,5 @@
 package com.project.chess.controller;
 
-import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
 import com.project.chess.model.Game;
 import com.project.chess.model.Status;
 import com.project.chess.model.dto.MyGameDto;
