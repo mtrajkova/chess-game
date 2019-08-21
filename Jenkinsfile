@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Revert commit'){
             steps {
-                sh "git reset –hard f7f807b81c12409d0e4a5e6642a3dba6bcb56faa"
+                sh "git reset -–hard f7f807b81c12409d0e4a5e6642a3dba6bcb56faa"
             }
         }
         stage('Package') {
