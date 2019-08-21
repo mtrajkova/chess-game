@@ -1,6 +1,7 @@
 package com.project.chess.controller;
 
 import com.project.chess.model.Game;
+import com.project.chess.model.Status;
 import com.project.chess.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,7 +47,7 @@ public class GameController {
     }
 
     @PutMapping(value = "/update")
-    public ResponseEntity<Game> updateGameStatus(@RequestParam(value = "id") Long id, @RequestParam(value = "status") String status) {
+    public ResponseEntity<Game> updateGameStatus(@RequestParam(value = "id") Long id, @RequestParam(value = "status") Status status) {
         Game updatedGame = gameService.updateGameStatus(status, id);
         return new ResponseEntity<>(updatedGame, HttpStatus.OK);
     }
