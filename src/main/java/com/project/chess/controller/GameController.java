@@ -1,5 +1,6 @@
 package com.project.chess.controller;
 
+import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
 import com.project.chess.model.Game;
 import com.project.chess.model.Status;
 import com.project.chess.model.dto.MyGameDto;
@@ -35,13 +36,13 @@ public class GameController {
     }
 
     @GetMapping(value = "/emitter/{id}")
-    public SseEmitter getEmitter(@PathVariable(value = "id") Long id){
-            return gameService.getEmmiterToUser(id);
+    public SseEmitter getEmitter(@PathVariable(value = "id") Long id) {
+        return gameService.getEmmiterToUser(id);
     }
 
     @GetMapping(value = "/user-games/{id}")
-    public ResponseEntity<List<Game>> getAllGamesForUser(@PathVariable(value = "id") Long id){
-        return new ResponseEntity<>(gameService.getAllGamesByUser(id),HttpStatus.OK);
+    public ResponseEntity<List<Game>> getAllGamesForUser(@PathVariable(value = "id") Long id) {
+        return new ResponseEntity<>(gameService.getAllGamesByUser(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "/new")

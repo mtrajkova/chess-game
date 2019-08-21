@@ -2,6 +2,7 @@ package com.project.chess.controller;
 
 
 import com.project.chess.model.Users;
+import com.project.chess.model.dto.ActiveUserDto;
 import com.project.chess.model.dto.UsersDto;
 import com.project.chess.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,8 @@ public class UserController {
 
     @GetMapping("/get-all-users/{username}")
     public ResponseEntity findAllUsersExceptMe(@PathVariable(value = "username") String username) {
-        List<String> displayNames = userService.getAllUsersExceptMe(username).stream().map(users -> users.getDisplayName()).collect(Collectors.toList());
-        return new ResponseEntity<>(displayNames, HttpStatus.OK);
+        List<ActiveUserDto> displayUsers = userService.getAllUsersExceptMe(username).stream()
+                .map(ActiveUserDto::fromUsers).collect(Collectors.toList());
+        return new ResponseEntity<>(displayUsers, HttpStatus.OK);
     }
 }

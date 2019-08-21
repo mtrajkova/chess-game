@@ -1,5 +1,6 @@
 package com.project.chess.model;
 
+import com.project.chess.model.dto.ActiveUserDto;
 import com.project.chess.model.dto.UsersDto;
 import lombok.AllArgsConstructor;
 import lombok.experimental.Wither;
@@ -76,6 +77,10 @@ public class Users implements UserDetails {
     public static Users fromUsersDto(UsersDto dto){
         return new Users(dto.getUsername(), dto.getDisplayName(), dto.getPassword(), false);
     }
+
+//    public static Users fromActiveUsersDto(ActiveUserDto activeUserDto) {
+//        return new Users(activeUserDto.getUsername(), activeUserDto.getDisplayName(), activeUserDto.isLoggedIn());
+//    }
 
     public Long getId() {
         return id;
