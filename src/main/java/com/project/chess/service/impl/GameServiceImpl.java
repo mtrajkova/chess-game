@@ -72,7 +72,7 @@ public class GameServiceImpl implements GameService {
         return sseEmitterMap.get(id);
 
     }
-
+    @Override
     public void sendEventsToEmitters(){
 
         sseEmitterMap.forEach((aLong, sseEmitter) -> {

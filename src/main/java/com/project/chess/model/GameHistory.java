@@ -24,7 +24,7 @@ public class GameHistory {
     )
     private List<State> states;
 
-    private Map<Integer, State> orderedStates;
+   //private Map<Integer, State> orderedStates;
 
     public Long getId() {
         return id;
