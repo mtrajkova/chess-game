@@ -41,6 +41,10 @@ public class UsersDto {
         this.displayName = user.getDisplayName();
     }
 
+    public static UsersDto fromUsers(Users user){
+        return new UsersDto(user.getUsername(), user.getPassword(), user.getDisplayName(), user.getPassword());
+    }
+
     public String getUsername() {
         return username;
     }

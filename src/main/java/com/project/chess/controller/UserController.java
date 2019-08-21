@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody Users user, BindingResult bindingResult) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UsersDto user, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             List<String> fieldErrors = bindingResult.getAllErrors().stream()
@@ -37,8 +37,8 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(fieldErrors);
         }
 
-        Users createdUser = userService.createUser(user);
-        return ResponseEntity.status(HttpStatus.OK).body(createdUser);
+        Users createdUser = userService.createUser(Users.fromUsersDto(user));
+        return ResponseEntity.status(HttpStatus.OK).body(UsersDto.fromUsers(createdUser));
     }
 
     @PostMapping("login")
