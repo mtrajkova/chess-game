@@ -44,6 +44,16 @@ public class Users implements UserDetails {
         this.loggedIn = status;
     }
 
+    public Users(Users original){
+        this.id = original.id;
+        this.username = original.username;
+        this.password = original.password;
+        this.displayName = original.displayName;
+        this.loggedIn = original.loggedIn;
+        this.gamesPlayerOne = original.gamesPlayerOne;
+        this.gamesPlayerTwo = original.gamesPlayerTwo;
+    }
+
     public Long getId() {
         return id;
     }
