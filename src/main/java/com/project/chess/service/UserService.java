@@ -1,6 +1,7 @@
 package com.project.chess.service;
 
 import com.project.chess.model.Users;
+import com.project.chess.model.dto.UsersDto;
 
 import java.util.List;
 import java.util.Set;
@@ -19,4 +20,6 @@ public interface UserService {
     Users updateUserActivityStatus(String username, boolean status);
 
     Set<Users> getAllUsersExceptMe(String myUsername);
+
+    UsersDto login(UsersDto requestUser);
 }

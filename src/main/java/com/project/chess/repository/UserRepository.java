@@ -11,4 +11,5 @@ import java.util.Set;
 public interface UserRepository extends JpaRepository<Users, Long> {
     Set<Users> findAllByUsernameNot(String username);
     Optional<Users> findByUsername(String username);
+    Optional<Users> findByDisplayName(String displayName);
 }
