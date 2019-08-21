@@ -1,9 +1,7 @@
 package com.project.chess.service;
 
-import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
 import com.project.chess.model.Game;
 import com.project.chess.model.Status;
-import com.project.chess.model.dto.MoveResponseDto;
 import com.project.chess.model.dto.MyGameDto;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -23,9 +21,7 @@ public interface GameService {
 
    // void sendEventsToEmitters();
 
-    MoveResponseDto initializeGame() throws MoveGeneratorException;
 
-    void startGame(Game game);
-   // void sendEventsToEmitters();
+
 }
 

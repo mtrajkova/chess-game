@@ -69,12 +69,13 @@ public class GameServiceImpl implements GameService {
     @Override
     public SseEmitter getEmmiterToUser(Long id) {
 
+
         SsEmitter.setSseEmitterMap(id, new SseEmitter());
 
         return SsEmitter.getSseEmitterMap().get(id);
     }
-
-    /*@Override
+/*
+    @Override
     public void sendEventsToEmitters() {
         sseEmitterMap.forEach((aLong, sseEmitter) -> {
             try {
@@ -84,26 +85,5 @@ public class GameServiceImpl implements GameService {
             }
         });
     }*/
-
-    @Override
-    public MoveResponseDto initializeGame() throws MoveGeneratorException {
-        MoveResponseDto moveResponseDto = new MoveResponseDto();
-        Board board = new Board();
-
-        moveResponseDto.setFEN(board.getFen());
-        moveResponseDto.setPGN("");
-        moveResponseDto.setLegalMoves(MoveGenerator.generateLegalMoves(board));
-
-        return moveResponseDto;
-    }
-
-    @Override
-    public void startGame(Game game) {
-        Game gameToUpdate = gameRepository.findById(game.getId()).orElseThrow(() -> new GameNotFoundException("Game not found!"));
-
-        gameToUpdate.setStatus(Status.ACTIVE);
-
-        gameRepository.save(gameToUpdate);
-    }
 
 }
