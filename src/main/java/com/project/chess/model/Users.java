@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Wither
 @AllArgsConstructor
@@ -52,6 +53,23 @@ public class Users implements UserDetails {
         this.loggedIn = original.loggedIn;
         this.gamesPlayerOne = original.gamesPlayerOne;
         this.gamesPlayerTwo = original.gamesPlayerTwo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Users users = (Users) o;
+        return loggedIn == users.loggedIn &&
+                Objects.equals(id, users.id) &&
+                Objects.equals(username, users.username) &&
+                Objects.equals(displayName, users.displayName) &&
+                Objects.equals(password, users.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, displayName, password, loggedIn);
     }
 
     public Long getId() {
