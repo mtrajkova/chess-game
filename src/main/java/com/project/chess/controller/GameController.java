@@ -2,13 +2,17 @@ package com.project.chess.controller;
 
 import com.project.chess.model.Game;
 import com.project.chess.model.Status;
+import com.project.chess.model.dto.MyGameDto;
 import com.project.chess.service.GameService;
+import com.project.chess.service.impl.SsEmitter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -41,9 +45,14 @@ public class GameController {
     }
 
     @PostMapping(value = "/new")
-    public ResponseEntity<Game> sendRequestForGame(@RequestBody Game game) {
-        Game createdGame = gameService.createGame(game);
-        return new ResponseEntity<>(createdGame, HttpStatus.CREATED);
+    public ResponseEntity<MyGameDto> sendRequestForGame(@RequestBody Game game) {
+        MyGameDto myGameDto = gameService.createGame(game);
+        try {
+            SsEmitter.getSseEmitterMap().get(game.getPlayerTwo().getId()).send(myGameDto, MediaType.APPLICATION_JSON);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(myGameDto, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/update")
@@ -51,8 +60,8 @@ public class GameController {
         Game updatedGame = gameService.updateGameStatus(status, id);
         return new ResponseEntity<>(updatedGame, HttpStatus.OK);
     }
-    @GetMapping(value = "/test")
+    /*@GetMapping(value = "/test")
     public void test(){
         gameService.sendEventsToEmitters();
-    }
+    }*/
 }
