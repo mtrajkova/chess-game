@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class GameServiceImpl implements GameService {
     private final GameRepository gameRepository;
     private final UserService userService;
 
-    private static Map<Long, SseEmitter> sseEmitterMap = new HashMap<>();
+    private static Map<Long, SseEmitter> sseEmitterMap = Collections.synchronizedMap(new HashMap<>());
 
     @Autowired
     public GameServiceImpl(GameRepository gameRepository, UserServiceImpl userService) {
