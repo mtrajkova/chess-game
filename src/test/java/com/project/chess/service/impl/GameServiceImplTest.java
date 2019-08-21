@@ -25,6 +25,9 @@ public class GameServiceImplTest {
     @Mock
     private GameRepository gameRepository;
 
+    @Mock
+    private UserServiceImpl userService;
+
     @InjectMocks
     private GameServiceImpl gameService;
 
@@ -83,6 +86,8 @@ public class GameServiceImplTest {
     @Test
     public void createGame() {
 
+        when(userService.getUserById(game2.getPlayerOne().getId())).thenReturn(game2.getPlayerOne());
+        when(userService.getUserById(game2.getPlayerTwo().getId())).thenReturn(game2.getPlayerTwo());
         when(gameRepository.save(game2)).thenReturn(game2);
         Game createdGame = gameService.createGame(game2);
         assertThat(createdGame, is(equalTo(game2)));
