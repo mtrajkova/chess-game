@@ -1,18 +1,18 @@
 package com.project.chess.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.chess.exception.GameNotFoundException;
 import com.project.chess.model.Game;
+import com.project.chess.model.Status;
 import com.project.chess.repository.GameRepository;
 import com.project.chess.service.GameService;
 import com.project.chess.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +23,7 @@ public class GameServiceImpl implements GameService {
     private final GameRepository gameRepository;
     private final UserService userService;
 
-    private static Map<Long, SseEmitter> sseEmitterMap = new HashMap<>();
+    private static Map<Long, SseEmitter> sseEmitterMap = Collections.synchronizedMap(new HashMap<>());
 
     @Autowired
     public GameServiceImpl(GameRepository gameRepository, UserServiceImpl userService) {
@@ -48,7 +48,7 @@ public class GameServiceImpl implements GameService {
         game.setPlayerTwo(userService.getUserById(game.getPlayerTwo().getId()));
         gameRepository.save(game);
         try {
-            sseEmitterMap.get(game.getPlayerTwo().getId()).send(game,MediaType.APPLICATION_JSON);
+            sseEmitterMap.get(game.getPlayerTwo().getId()).send(game, MediaType.APPLICATION_JSON);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,7 +56,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Game updateGameStatus(String newStatus, Long id) {
+    public Game updateGameStatus(Status newStatus, Long id) {
         return gameRepository.findById(id)
                 .map(game -> {
                     game.setStatus(newStatus);
@@ -67,14 +67,13 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public SseEmitter getEmmiterToUser(Long id) {
-
         sseEmitterMap.put(id, new SseEmitter());
         return sseEmitterMap.get(id);
 
     }
 
-    public void sendEventsToEmitters(){
-
+    @Override
+    public void sendEventsToEmitters() {
         sseEmitterMap.forEach((aLong, sseEmitter) -> {
             try {
                 sseEmitter.send(new Game(), MediaType.ALL);

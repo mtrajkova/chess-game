@@ -16,16 +16,6 @@ public class GameHistory {
     @NotNull
     private Game game;
 
-    @ManyToMany
-    @JoinTable(
-            name = "game_state",
-            joinColumns = { @JoinColumn(name = "game_history_id") },
-            inverseJoinColumns = {@JoinColumn(name = "state_id")}
-    )
-    private List<State> states;
-
-    private Map<Integer, State> orderedStates;
-
     public Long getId() {
         return id;
     }

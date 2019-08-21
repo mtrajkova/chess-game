@@ -6,15 +6,25 @@ import com.project.chess.validation.ValidPassword;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @PasswordMatches
 public class UsersDto {
 
+    @Email(message = "Email is not valid")
+    @NotEmpty(message = "Email can not be empty")
     private String username;
+
+    @NotEmpty(message = "Password can not be empty")
     @ValidPassword
     private String password;
+
+    @NotEmpty(message = "Display name can not be empty")
     private String displayName;
+
     private String matchingPassword;
 
     public String getMatchingPassword() {

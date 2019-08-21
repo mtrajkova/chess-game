@@ -7,9 +7,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Wither
 @AllArgsConstructor
@@ -19,16 +19,12 @@ public class Users implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Email(message = "Email is not valid")
     @Column(unique = true)
-    @NotEmpty(message = "Email can not be empty")
     private String username;
 
     @Column(unique = true)
-    @NotEmpty(message = "Display name can not be empty")
     private String displayName;
 
-    @NotEmpty(message = "Password can not be empty")
     private String password;
 
     private boolean loggedIn;
@@ -47,6 +43,33 @@ public class Users implements UserDetails {
         this.displayName = display_name;
         this.password = password;
         this.loggedIn = status;
+    }
+
+    public Users(Users original){
+        this.id = original.id;
+        this.username = original.username;
+        this.password = original.password;
+        this.displayName = original.displayName;
+        this.loggedIn = original.loggedIn;
+        this.gamesPlayerOne = original.gamesPlayerOne;
+        this.gamesPlayerTwo = original.gamesPlayerTwo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Users users = (Users) o;
+        return loggedIn == users.loggedIn &&
+                Objects.equals(id, users.id) &&
+                Objects.equals(username, users.username) &&
+                Objects.equals(displayName, users.displayName) &&
+                Objects.equals(password, users.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, displayName, password, loggedIn);
     }
 
     public Long getId() {
