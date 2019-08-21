@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,16 +18,12 @@ public class Users implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Email(message = "Email is not valid")
     @Column(unique = true)
-    @NotEmpty(message = "Email can not be empty")
     private String username;
 
     @Column(unique = true)
-    @NotEmpty(message = "Display name can not be empty")
     private String displayName;
 
-    @NotEmpty(message = "Password can not be empty")
     private String password;
 
     private boolean loggedIn;
@@ -47,6 +42,16 @@ public class Users implements UserDetails {
         this.displayName = display_name;
         this.password = password;
         this.loggedIn = status;
+    }
+
+    public Users(Users original){
+        this.id = original.id;
+        this.username = original.username;
+        this.password = original.password;
+        this.displayName = original.displayName;
+        this.loggedIn = original.loggedIn;
+        this.gamesPlayerOne = original.gamesPlayerOne;
+        this.gamesPlayerTwo = original.gamesPlayerTwo;
     }
 
     public Long getId() {
