@@ -3,6 +3,7 @@ package com.project.chess.service.impl;
 import com.project.chess.model.Game;
 import com.project.chess.model.Status;
 import com.project.chess.model.Users;
+import com.project.chess.model.dto.MyGameDto;
 import com.project.chess.repository.GameRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -91,16 +92,16 @@ public class GameServiceImplTest {
         assertThat(foundGames, is(equalTo(Stream.of(game1, game3).collect(Collectors.toList()))));
     }
 
-   /* @Test
+    @Test
     public void createGame() {
 
         when(userService.getUserById(game2.getPlayerOne().getId())).thenReturn(game2.getPlayerOne());
         when(userService.getUserById(game2.getPlayerTwo().getId())).thenReturn(game2.getPlayerTwo());
         when(gameRepository.save(game2)).thenReturn(game2);
-        //when(sseEmitterMap.get(game2.getPlayerTwo().getId()).send(game2, MediaType.APPLICATION_JSON)).thenReturn(void);
-        Game createdGame = gameService.createGame(game2);
-        assertThat(createdGame, is(equalTo(game2)));
-    }*/
+        MyGameDto createdGame = gameService.createGame(game2);
+        assertThat(createdGame.getOpponentName(), is(equalTo(game2.getPlayerTwo().getUsername())));
+        assertThat(createdGame.getStatus(), is(equalTo(game2.getStatus())));
+    }
 
     @Test
     public void updateGameStatus() {

@@ -52,7 +52,7 @@ public class GameServiceImpl implements GameService {
         game.setPlayerOne(userService.getUserById(game.getPlayerOne().getId()));
         game.setPlayerTwo(userService.getUserById(game.getPlayerTwo().getId()));
         gameRepository.save(game);
-        MyGameDto myGameDto = new MyGameDto(game.getId(), game.getPlayerTwo().getDisplayName(), game.getStatus(), game.getStartedDate());
+        MyGameDto myGameDto = new MyGameDto(game.getId(), game.getPlayerTwo().getUsername(), game.getStatus(), game.getStartedDate());
         return myGameDto;
     }
 
