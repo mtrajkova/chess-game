@@ -6,8 +6,8 @@ import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
 import com.project.chess.exception.GameNotFoundException;
 import com.project.chess.model.Game;
 import com.project.chess.model.Status;
-import com.project.chess.model.Users;
 import com.project.chess.model.dto.MoveResponseDto;
+import com.project.chess.model.dto.MyGameDto;
 import com.project.chess.repository.GameRepository;
 import com.project.chess.service.GameService;
 import com.project.chess.service.UserService;
@@ -48,16 +48,12 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Game createGame(Game game) {
+    public MyGameDto createGame(Game game) {
         game.setPlayerOne(userService.getUserById(game.getPlayerOne().getId()));
         game.setPlayerTwo(userService.getUserById(game.getPlayerTwo().getId()));
         gameRepository.save(game);
-        try {
-            sseEmitterMap.get(game.getPlayerTwo().getId()).send(game, MediaType.APPLICATION_JSON);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return game;
+        MyGameDto myGameDto = new MyGameDto(game.getId(), game.getPlayerTwo().getDisplayName(), game.getStatus(), game.getStartedDate());
+        return myGameDto;
     }
 
     @Override
@@ -72,12 +68,13 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public SseEmitter getEmmiterToUser(Long id) {
-        sseEmitterMap.put(id, new SseEmitter());
-        return sseEmitterMap.get(id);
 
+        SsEmitter.setSseEmitterMap(id, new SseEmitter());
+
+        return SsEmitter.getSseEmitterMap().get(id);
     }
 
-    @Override
+    /*@Override
     public void sendEventsToEmitters() {
         sseEmitterMap.forEach((aLong, sseEmitter) -> {
             try {
@@ -86,7 +83,7 @@ public class GameServiceImpl implements GameService {
                 e.printStackTrace();
             }
         });
-    }
+    }*/
 
     @Override
     public MoveResponseDto initializeGame() throws MoveGeneratorException {
@@ -108,4 +105,5 @@ public class GameServiceImpl implements GameService {
 
         gameRepository.save(gameToUpdate);
     }
+
 }
