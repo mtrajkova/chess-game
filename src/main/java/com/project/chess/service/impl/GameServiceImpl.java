@@ -81,6 +81,5 @@ public class GameServiceImpl implements GameService {
                 e.printStackTrace();
             }
         });
-
     }
 }

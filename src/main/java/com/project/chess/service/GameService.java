@@ -17,6 +17,7 @@ public interface GameService {
     Game updateGameStatus(Status newStatus, Long id);
 
     SseEmitter getEmmiterToUser(Long id);
+
     void sendEventsToEmitters();
 }
 

@@ -51,6 +51,7 @@ public class GameController {
         Game updatedGame = gameService.updateGameStatus(status, id);
         return new ResponseEntity<>(updatedGame, HttpStatus.OK);
     }
+
     @GetMapping(value = "/test")
     public void test(){
         gameService.sendEventsToEmitters();
