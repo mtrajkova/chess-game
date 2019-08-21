@@ -1,8 +1,13 @@
 package com.project.chess.service.impl;
 
+import com.github.bhlangonijr.chesslib.Board;
+import com.github.bhlangonijr.chesslib.move.MoveGenerator;
+import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
 import com.project.chess.exception.GameNotFoundException;
 import com.project.chess.model.Game;
 import com.project.chess.model.Status;
+import com.project.chess.model.Users;
+import com.project.chess.model.dto.MoveResponseDto;
 import com.project.chess.repository.GameRepository;
 import com.project.chess.service.GameService;
 import com.project.chess.service.UserService;
@@ -81,6 +86,26 @@ public class GameServiceImpl implements GameService {
                 e.printStackTrace();
             }
         });
+    }
 
+    @Override
+    public MoveResponseDto initializeGame() throws MoveGeneratorException {
+        MoveResponseDto moveResponseDto = new MoveResponseDto();
+        Board board = new Board();
+
+        moveResponseDto.setFEN(board.getFen());
+        moveResponseDto.setPGN("");
+        moveResponseDto.setLegalMoves(MoveGenerator.generateLegalMoves(board));
+
+        return moveResponseDto;
+    }
+
+    @Override
+    public void startGame(Game game) {
+        Game gameToUpdate = gameRepository.findById(game.getId()).orElseThrow(() -> new GameNotFoundException("Game not found!"));
+
+        gameToUpdate.setStatus(Status.ACTIVE);
+
+        gameRepository.save(gameToUpdate);
     }
 }

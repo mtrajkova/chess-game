@@ -10,4 +10,5 @@ import java.util.List;
 public interface GameRepository extends JpaRepository<Game, Long> {
 
     List<Game> findAllByPlayerOneIdOrPlayerTwoId(Long playerOne_id, Long playerTwo_id);
+
 }
