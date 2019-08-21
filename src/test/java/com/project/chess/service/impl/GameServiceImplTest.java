@@ -1,6 +1,7 @@
 package com.project.chess.service.impl;
 
 import com.project.chess.model.Game;
+import com.project.chess.model.Status;
 import com.project.chess.model.Users;
 import com.project.chess.repository.GameRepository;
 import org.junit.Before;
@@ -9,8 +10,12 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.MediaType;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,6 +32,9 @@ public class GameServiceImplTest {
 
     @Mock
     private UserServiceImpl userService;
+
+    @Mock
+    private HashMap<Long, SseEmitter> sseEmitterMap;
 
     @InjectMocks
     private GameServiceImpl gameService;
@@ -54,17 +62,17 @@ public class GameServiceImplTest {
                 .withId(1L)
                 .withPlayerOne(user1)
                 .withPlayerTwo(user2)
-                .withStatus("active");
+                .withStatus(Status.ACTIVE);
         game2 = new Game()
                 .withId(2L)
                 .withPlayerOne(user1)
                 .withPlayerTwo(user3)
-                .withStatus("active");
+                .withStatus(Status.ACTIVE);
         game3 = new Game()
                 .withId(3L)
                 .withPlayerOne(user2)
                 .withPlayerTwo(user3)
-                .withStatus("finished");
+                .withStatus(Status.FINISHED);
     }
 
     @Test
@@ -89,6 +97,7 @@ public class GameServiceImplTest {
         when(userService.getUserById(game2.getPlayerOne().getId())).thenReturn(game2.getPlayerOne());
         when(userService.getUserById(game2.getPlayerTwo().getId())).thenReturn(game2.getPlayerTwo());
         when(gameRepository.save(game2)).thenReturn(game2);
+        //when(sseEmitterMap.get(game2.getPlayerTwo().getId()).send(game2, MediaType.APPLICATION_JSON)).thenReturn(void);
         Game createdGame = gameService.createGame(game2);
         assertThat(createdGame, is(equalTo(game2)));
     }
@@ -96,11 +105,11 @@ public class GameServiceImplTest {
     @Test
     public void updateGameStatus() {
 
-        String oldStatus = game1.getStatus();
+        Status oldStatus = game1.getStatus();
 
         when(gameRepository.findById(game1.getId())).thenReturn(Optional.of(game1));
         when(gameRepository.save(game1)).thenReturn(game1);
-        gameService.updateGameStatus("finished", 1L);
+        gameService.updateGameStatus(Status.FINISHED, 1L);
         assertThat(game1.getStatus(), is(not(equalTo(oldStatus))));
     }
 }

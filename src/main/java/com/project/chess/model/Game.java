@@ -23,7 +23,7 @@ public class Game {
     @NotNull
     private Users playerTwo;
 
-    private String status;
+    private Status status;
     private Date startedDate;
     private Color playerOneColor;
 
@@ -33,7 +33,7 @@ public class Game {
     public Game() {
     }
 
-    public Game(Users playerOne, Users playerTwo, String status, Date startedDate, Color playerOneColor) {
+    public Game(Users playerOne, Users playerTwo, Status status, Date startedDate, Color playerOneColor) {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         this.status = status;
@@ -41,7 +41,7 @@ public class Game {
         this.playerOneColor = playerOneColor;
     }
 
-    public Game(Users playerOne, Users playerTwo, String status, Color playerOneColor) {
+    public Game(Users playerOne, Users playerTwo, Status status, Color playerOneColor) {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         this.status = status;
@@ -80,11 +80,11 @@ public class Game {
         this.playerTwo = playerTwo;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
