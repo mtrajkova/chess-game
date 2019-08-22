@@ -17,6 +17,11 @@ public class State {
 
         this.FEN = FEN;
     }
+    // only for test
+    public State(State original){
+        this.id = original.id;
+        this.FEN = original.FEN;
+    }
 
     public String getFEN() {
         return FEN;

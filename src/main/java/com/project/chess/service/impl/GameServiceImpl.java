@@ -1,7 +1,9 @@
 package com.project.chess.service.impl;
 
+import com.github.bhlangonijr.chesslib.Board;
 import com.project.chess.exception.GameNotFoundException;
 import com.project.chess.model.Game;
+import com.project.chess.model.State;
 import com.project.chess.model.Status;
 import com.project.chess.model.dto.MyGameDto;
 import com.project.chess.repository.GameRepository;
@@ -11,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,9 +38,15 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public List<MyGameDto> getAllGamesByUser(Long userId) {
-        List<MyGameDto> myGameDtos = gameRepository.findAllByPlayerOneIdOrPlayerTwoId(userId,userId)
-                .stream().map(game -> new MyGameDto(game.getId(),game.getPlayerTwo().getUsername(),game.getStatus(),game.getStartedDate(),game.getLastState().getFEN()))
-                .collect(Collectors.toList());
+        List<MyGameDto> myGameDtos = new ArrayList<>();
+//               myGameDtos = gameRepository.findAllByPlayerOneIdOrPlayerTwoId(userId,userId)
+//                .stream()
+//                       .map(game -> new MyGameDto(game.getId(),game.getPlayerTwo().getUsername(),game.getStatus(),game.getStartedDate(),game.getLastState().getFEN()))
+//                .collect(Collectors.toList());
+        List<Game> gamesWithUsers = gameRepository.findAllByPlayerOneIdOrPlayerTwoId(userId, userId);
+        for (Game game : gamesWithUsers) {
+            myGameDtos.add(MyGameDto.fromGame(game));
+        }
         return myGameDtos;
         //return gameRepository.findAllByPlayerOneIdOrPlayerTwoId(userId, userId);
     }
@@ -50,8 +55,10 @@ public class GameServiceImpl implements GameService {
     public MyGameDto createGame(Game game) {
         game.setPlayerOne(userService.getUserById(game.getPlayerOne().getId()));
         game.setPlayerTwo(userService.getUserById(game.getPlayerTwo().getId()));
+        game.setLastState(new State(new Board().getFen()));
+        game.setPGN("");
         gameRepository.save(game);
-        return new MyGameDto(game.getId(), game.getPlayerTwo().getUsername(), game.getStatus(), game.getStartedDate(),game.getLastState().getFEN());
+        return new MyGameDto(game.getId(), game.getPlayerTwo().getUsername(), game.getStatus(), game.getStartedDate(), game.getLastState().getFEN(), game.getPGN());
 
     }
 

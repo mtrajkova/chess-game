@@ -1,5 +1,6 @@
 package com.project.chess.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.experimental.Wither;
 
@@ -32,6 +33,16 @@ public class Game {
     private State lastState;
 
     public Game() {
+    }
+
+    public Game(Game original) {
+        this.id = original.id;
+        this.playerOne = original.playerOne;
+        this.playerTwo = original.playerTwo;
+        this.status = original.status;
+        this.startedDate = original.startedDate;
+        this.playerOneColor = original.playerOneColor;
+        this.lastState = original.lastState;
     }
 
     public Game(Users playerOne, Users playerTwo, Status status, Date startedDate, Color playerOneColor, State lastState ) {
