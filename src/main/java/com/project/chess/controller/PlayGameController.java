@@ -1,6 +1,7 @@
 package com.project.chess.controller;
 
 import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
+import com.project.chess.exception.GlobalExceptionHandler;
 import com.project.chess.model.dto.MoveResponseDto;
 import com.project.chess.service.PlayGameService;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/play")
-public class PlayGameController {
+public class PlayGameController extends GlobalExceptionHandler {
     private final PlayGameService gameService;
 
     public PlayGameController(PlayGameService gameService) {

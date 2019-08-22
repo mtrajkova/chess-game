@@ -1,6 +1,7 @@
 package com.project.chess.controller;
 
 
+import com.project.chess.exception.GlobalExceptionHandler;
 import com.project.chess.model.Users;
 import com.project.chess.model.dto.ActiveUserDto;
 import com.project.chess.model.dto.JwtAuthenticationResponse;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends GlobalExceptionHandler {
 
     private final UserService userService;
 

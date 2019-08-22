@@ -1,5 +1,6 @@
 package com.project.chess.controller;
 
+import com.project.chess.exception.GlobalExceptionHandler;
 import com.project.chess.model.Game;
 import com.project.chess.model.Status;
 import com.project.chess.model.dto.MyGameDto;
@@ -18,7 +19,7 @@ import java.util.List;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/game")
-public class GameController {
+public class GameController extends GlobalExceptionHandler {
 
     private final GameService gameService;
 
