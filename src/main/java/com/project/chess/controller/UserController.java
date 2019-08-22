@@ -39,7 +39,7 @@ public class UserController {
         }
 
         Users createdUser = userService.createUser(Users.fromUsersDto(user));
-        return ResponseEntity.status(HttpStatus.OK).body(UsersDto.fromUsers(createdUser));
+        return ResponseEntity.status(HttpStatus.CREATED).body(UsersDto.fromUsers(createdUser));
     }
 
     @PostMapping("/login")
