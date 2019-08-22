@@ -20,23 +20,30 @@ public class PlayGameServiceImpl implements PlayGameService {
     }
 
     @Override
-    public MoveResponseDto initializeGame() throws MoveGeneratorException {
+    public MoveResponseDto startGame(Long gameId) throws MoveGeneratorException {
         MoveResponseDto moveResponseDto = new MoveResponseDto();
-        Board board = new Board();
+        Game game = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException("Game " + gameId + " does not exist!"));
+
+        game.setStatus(Status.ACTIVE);
+
+        Board board = getCurrentBoard(game);
 
         moveResponseDto.setFEN(board.getFen());
-        moveResponseDto.setPGN("");
+
+        //TODO set PGN to Game data model
+//        moveResponseDto.setPGN("");
+
         moveResponseDto.setLegalMoves(MoveGenerator.generateLegalMoves(board));
 
         return moveResponseDto;
     }
 
-    @Override
-    public void startGame(Long gameId) {
-        Game gameToUpdate = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException("Game " + gameId + " does not exist!"));
+    private Board getCurrentBoard(Game game) {
+        String fen = game.getLastState().getFEN();
+        Board board = new Board();
+        board.loadFromFen(fen);
 
-        gameToUpdate.setStatus(Status.ACTIVE);
-
-        gameRepository.save(gameToUpdate);
+        return board;
     }
+
 }

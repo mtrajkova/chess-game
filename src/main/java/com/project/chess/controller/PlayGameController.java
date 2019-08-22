@@ -2,7 +2,6 @@ package com.project.chess.controller;
 
 import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
 import com.project.chess.model.dto.MoveResponseDto;
-import com.project.chess.service.GameService;
 import com.project.chess.service.PlayGameService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +22,7 @@ public class PlayGameController {
     @GetMapping(value = "{id}")
     public ResponseEntity<MoveResponseDto> startGame(@PathVariable Long id) {
         try {
-            gameService.startGame(id);
-            MoveResponseDto moveResponseDto = gameService.initializeGame();
+            MoveResponseDto moveResponseDto = gameService.startGame(id);
 
             return ResponseEntity.status(HttpStatus.OK).body(moveResponseDto);
         } catch (MoveGeneratorException e) {

@@ -26,6 +26,7 @@ public class Game {
     private Status status;
     private Date startedDate;
     private Color playerOneColor;
+//    private String PGN;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private State lastState;

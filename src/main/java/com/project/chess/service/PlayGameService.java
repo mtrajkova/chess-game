@@ -5,7 +5,6 @@ import com.project.chess.model.dto.MoveResponseDto;
 
 public interface PlayGameService {
 
-    MoveResponseDto initializeGame() throws MoveGeneratorException;
+    MoveResponseDto startGame(Long gameId) throws MoveGeneratorException;
 
-    void startGame(Long gameId);
 }
