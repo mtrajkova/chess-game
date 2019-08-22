@@ -6,9 +6,9 @@ pipeline {
                 sh "mvn clean"
             }
         }
-        stage('Revert commit'){
+        stage('Test') {
             steps {
-                sh "git checkout f7f807b81c12409d0e4a5e6642a3dba6bcb56faa"
+                sh "mvn test"
             }
         }
         stage('Package') {
@@ -16,6 +16,10 @@ pipeline {
                 sh "mvn package"
             }
         }
-        
+        stage('Send over SSH') {
+            steps {
+                sh "sudo scp -i kpChessGame.pem target/chess-0.0.1-SNAPSHOT.jar ec2-user@ip-192-168-0-165.us-east-2.compute.internal:/home/ec2-user/chess-game"
+            }
+        }
     }
 }
