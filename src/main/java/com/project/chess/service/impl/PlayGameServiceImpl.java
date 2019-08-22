@@ -21,18 +21,20 @@ public class PlayGameServiceImpl implements PlayGameService {
 
     @Override
     public MoveResponseDto startGame(Long gameId) throws MoveGeneratorException {
-        MoveResponseDto moveResponseDto = new MoveResponseDto();
+
         Game game = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException("Game " + gameId + " does not exist!"));
 
         game.setStatus(Status.ACTIVE);
 
+        return getMoveResponseFromGame(game);
+    }
+
+    private MoveResponseDto getMoveResponseFromGame(Game game) throws MoveGeneratorException {
         Board board = getCurrentBoard(game);
 
+        MoveResponseDto moveResponseDto = new MoveResponseDto();
         moveResponseDto.setFEN(board.getFen());
-
-        //TODO set PGN to Game data model
-//        moveResponseDto.setPGN("");
-
+        moveResponseDto.setPGN(game.getPGN());
         moveResponseDto.setLegalMoves(MoveGenerator.generateLegalMoves(board));
 
         return moveResponseDto;

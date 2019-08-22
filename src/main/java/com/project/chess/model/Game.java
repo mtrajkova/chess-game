@@ -26,7 +26,7 @@ public class Game {
     private Status status;
     private Date startedDate;
     private Color playerOneColor;
-//    private String PGN;
+    private String PGN;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private State lastState;
@@ -56,6 +56,14 @@ public class Game {
         this.playerTwo = playerTwo;
         this.status = status;
         this.playerOneColor = playerOneColor;
+    }
+
+    public String getPGN() {
+        return PGN;
+    }
+
+    public void setPGN(String PGN) {
+        this.PGN = PGN;
     }
 
     public State getLastState() {
