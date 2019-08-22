@@ -58,4 +58,11 @@ public class UserController {
                 .map(ActiveUserDto::fromUsers).collect(Collectors.toList());
         return new ResponseEntity<>(displayUsers, HttpStatus.OK);
     }
+
+    @GetMapping("/get-all-users")
+    public ResponseEntity findAllUsers() {
+        List<ActiveUserDto> displayUsers = userService.getAllUsers().stream()
+                .map(ActiveUserDto::fromUsers).collect(Collectors.toList());
+        return new ResponseEntity<>(displayUsers, HttpStatus.OK);
+    }
 }
