@@ -33,7 +33,7 @@ public class Game {
     public Game() {
     }
 
-    public Game(Users playerOne, Users playerTwo, Status status, Date startedDate, Color playerOneColor, State lastState) {
+    public Game(Users playerOne, Users playerTwo, Status status, Date startedDate, Color playerOneColor, State lastState ) {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         this.status = status;

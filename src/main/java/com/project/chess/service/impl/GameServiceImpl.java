@@ -47,6 +47,7 @@ public class GameServiceImpl implements GameService {
         game.setPlayerTwo(userService.getUserById(game.getPlayerTwo().getId()));
         gameRepository.save(game);
         return new MyGameDto(game.getId(), game.getPlayerTwo().getUsername(), game.getStatus(), game.getStartedDate());
+
     }
 
     @Override
@@ -59,9 +60,9 @@ public class GameServiceImpl implements GameService {
                 .orElseThrow(() -> new GameNotFoundException("Game " + id + " does not exist!"));
     }
 
+
     @Override
     public SseEmitter getEmmiterToUser(Long id) {
-
 
         SsEmitter.setSseEmitterMap(id, new SseEmitter());
 
