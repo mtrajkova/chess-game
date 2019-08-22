@@ -13,10 +13,7 @@ public class MyGameDto {
 
     public MyGameDto() {
     }
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
     public MyGameDto(Long id, String opponentName, Status status, Date dateStarted, String state) {
         this.id = id;
         this.opponentName = opponentName;
@@ -24,15 +21,39 @@ public class MyGameDto {
         this.dateStarted = dateStarted;
         this.state=state;
     }
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
     public MyGameDto(Long id, String opponentName, Status status, Date dateStarted) {
         this.id = id;
         this.opponentName = opponentName;
         this.status = status;
         this.dateStarted = dateStarted;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setOpponentName(String opponentName) {
+        this.opponentName = opponentName;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setDateStarted(Date dateStarted) {
+        this.dateStarted = dateStarted;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getOpponentName() {

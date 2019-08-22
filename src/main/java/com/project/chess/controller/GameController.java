@@ -40,7 +40,7 @@ public class GameController {
     }
 
     @GetMapping(value = "/user-games/{id}")
-    public ResponseEntity<List<Game>> getAllGamesForUser(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<List<MyGameDto>> getAllGamesForUser(@PathVariable(value = "id") Long id) {
         return new ResponseEntity<>(gameService.getAllGamesByUser(id), HttpStatus.OK);
     }
 

@@ -92,7 +92,7 @@ public class GameServiceImplTest {
     public void getAllGamesByUser() {
 
         when(gameRepository.findAllByPlayerOneIdOrPlayerTwoId(user2.getId(), user2.getId())).thenReturn(Stream.of(game1, game3).collect(Collectors.toList()));
-        List<Game> foundGames = gameService.getAllGamesByUser(user2.getId());
+        List<MyGameDto> foundGames = gameService.getAllGamesByUser(user2.getId());
         assertThat(foundGames, is(equalTo(Stream.of(game1, game3).collect(Collectors.toList()))));
     }
 

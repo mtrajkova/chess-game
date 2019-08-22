@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class GameServiceImpl implements GameService {
@@ -37,8 +38,12 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public List<Game> getAllGamesByUser(Long userId) {
-        return gameRepository.findAllByPlayerOneIdOrPlayerTwoId(userId, userId);
+    public List<MyGameDto> getAllGamesByUser(Long userId) {
+        List<MyGameDto> myGameDtos = gameRepository.findAllByPlayerOneIdOrPlayerTwoId(userId,userId)
+                .stream().map(game -> new MyGameDto(game.getId(),game.getPlayerTwo().getUsername(),game.getStatus(),game.getStartedDate(),game.getLastState().getFEN()))
+                .collect(Collectors.toList());
+        return myGameDtos;
+        //return gameRepository.findAllByPlayerOneIdOrPlayerTwoId(userId, userId);
     }
 
     @Override
@@ -46,7 +51,7 @@ public class GameServiceImpl implements GameService {
         game.setPlayerOne(userService.getUserById(game.getPlayerOne().getId()));
         game.setPlayerTwo(userService.getUserById(game.getPlayerTwo().getId()));
         gameRepository.save(game);
-        return new MyGameDto(game.getId(), game.getPlayerTwo().getUsername(), game.getStatus(), game.getStartedDate());
+        return new MyGameDto(game.getId(), game.getPlayerTwo().getUsername(), game.getStatus(), game.getStartedDate(),game.getLastState().getFEN());
 
     }
 

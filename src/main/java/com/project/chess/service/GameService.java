@@ -11,7 +11,7 @@ public interface GameService {
 
     Game getGameById(Long id);
 
-    List<Game> getAllGamesByUser(Long userId);
+    List<MyGameDto> getAllGamesByUser(Long userId);
 
     MyGameDto createGame(Game game);
 
