@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +41,7 @@ public class UserController {
         }
 
         Users createdUser = userService.createUser(Users.fromUsersDto(user));
-        return ResponseEntity.status(HttpStatus.CREATED).body(UsersDto.fromUsers(createdUser));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ActiveUserDto.fromUsers(createdUser));
     }
 
     @PostMapping("/login")
@@ -67,5 +68,12 @@ public class UserController {
         List<ActiveUserDto> displayUsers = userService.getAllUsers().stream()
                 .map(ActiveUserDto::fromUsers).collect(Collectors.toList());
         return new ResponseEntity<>(displayUsers, HttpStatus.OK);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity logout(Authentication authentication) {
+        System.out.println(authentication.getName());
+        userService.logout(authentication.getName());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
