@@ -7,6 +7,7 @@ import com.project.chess.model.Status;
 import com.project.chess.model.Users;
 import com.project.chess.repository.GameRepository;
 import com.project.chess.repository.UserRepository;
+import com.project.chess.service.impl.SsEmitter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,12 +19,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.Date;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -114,6 +117,8 @@ public class GameControllerTest {
 
         userRepository.save(user2);
         userRepository.save(user3);
+
+        SsEmitter.getSseEmitterMap().put(game3.getPlayerTwo().getId(), new SseEmitter());
 
         mockMvc.perform(post("/game/new")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
