@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = authenticateUser(requestUser);
         Users user = (Users) authentication.getPrincipal();
 
-        updateUserStatusOnLogin(user);
+        updateUserActivityStatus(user.getUsername(), true);
 
         String jwt = TOKEN_PREFIX.concat(tokenProvider.generateToken(user.getUsername()));
         ActiveUserDto activeUserDto = new ActiveUserDto(user.getUsername(), user.getDisplayName(), user.isLoggedIn());
@@ -126,8 +126,4 @@ public class UserServiceImpl implements UserService {
         return authentication;
     }
 
-    private void updateUserStatusOnLogin(Users requestUser) {
-        requestUser.setLoggedIn(true);
-        userRepository.save(requestUser);
-    }
 }
