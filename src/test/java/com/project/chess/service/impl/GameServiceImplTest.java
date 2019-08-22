@@ -1,6 +1,7 @@
 package com.project.chess.service.impl;
 
 import com.project.chess.model.Game;
+import com.project.chess.model.State;
 import com.project.chess.model.Status;
 import com.project.chess.model.Users;
 import com.project.chess.model.dto.MyGameDto;
@@ -49,6 +50,8 @@ public class GameServiceImplTest {
     @Before
     public void setUp() {
 
+        State state = new State("blablablablalbalba");
+
         Users user1 = new Users()
                 .withId(1L)
                 .withUsername("nikola");
@@ -68,7 +71,8 @@ public class GameServiceImplTest {
                 .withId(2L)
                 .withPlayerOne(user1)
                 .withPlayerTwo(user3)
-                .withStatus(Status.ACTIVE);
+                .withStatus(Status.ACTIVE)
+                .withLastState(state);
         game3 = new Game()
                 .withId(3L)
                 .withPlayerOne(user2)

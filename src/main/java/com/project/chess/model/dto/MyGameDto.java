@@ -9,8 +9,17 @@ public class MyGameDto {
     private String opponentName;
     private Status status;
     private Date dateStarted;
+    private String state;
 
     public MyGameDto() {
+    }
+
+    public MyGameDto(Long id, String opponentName, Status status, Date dateStarted, String state) {
+        this.id = id;
+        this.opponentName = opponentName;
+        this.status = status;
+        this.dateStarted = dateStarted;
+        this.state=state;
     }
 
     public MyGameDto(Long id, String opponentName, Status status, Date dateStarted) {

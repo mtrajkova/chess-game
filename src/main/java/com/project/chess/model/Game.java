@@ -27,13 +27,22 @@ public class Game {
     private Date startedDate;
     private Color playerOneColor;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private State lastState;
 
     public Game() {
     }
 
-    public Game(Users playerOne, Users playerTwo, Status status, Date startedDate, Color playerOneColor) {
+    public Game(Users playerOne, Users playerTwo, Status status, Date startedDate, Color playerOneColor, State lastState) {
+        this.playerOne = playerOne;
+        this.playerTwo = playerTwo;
+        this.status = status;
+        this.startedDate = startedDate;
+        this.playerOneColor = playerOneColor;
+        this.lastState=lastState;
+    }
+
+    public Game(Users playerOne, Users playerTwo, Status status, Date startedDate, Color playerOneColor ) {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         this.status = status;

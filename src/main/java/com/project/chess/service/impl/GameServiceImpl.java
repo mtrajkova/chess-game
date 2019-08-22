@@ -1,22 +1,16 @@
 package com.project.chess.service.impl;
 
-import com.github.bhlangonijr.chesslib.Board;
-import com.github.bhlangonijr.chesslib.move.MoveGenerator;
-import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
 import com.project.chess.exception.GameNotFoundException;
 import com.project.chess.model.Game;
 import com.project.chess.model.Status;
-import com.project.chess.model.dto.MoveResponseDto;
 import com.project.chess.model.dto.MyGameDto;
 import com.project.chess.repository.GameRepository;
 import com.project.chess.service.GameService;
 import com.project.chess.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;

@@ -1,11 +1,9 @@
 package com.project.chess.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.chess.model.Color;
-import com.project.chess.model.Game;
-import com.project.chess.model.Status;
-import com.project.chess.model.Users;
+import com.project.chess.model.*;
 import com.project.chess.repository.GameRepository;
+import com.project.chess.repository.StateRepository;
 import com.project.chess.repository.UserRepository;
 import com.project.chess.service.impl.SsEmitter;
 import org.junit.Before;
@@ -54,12 +52,14 @@ public class GameControllerTest {
     private Game game1;
     private Game game2;
     private Game game3;
+    private Game game4;
+    private State state;
 
     @Before
     public void setUp() {
 
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-
+        state = new State("Blablablalba");
         user1 = new Users("ntomikj@endava.com", "ntomikj", "pass123", true);
         user2 = new Users("knastevski@endava.com", "knastevski", "111111", false);
         user3 = new Users("sgjorgjiev@endava.com", "sgjorgjiev", "654321", true);
@@ -67,6 +67,7 @@ public class GameControllerTest {
         game1 = new Game(user1, user2, Status.ACTIVE, new Date(), Color.BLACK);
         game2 = new Game(user1, user3, Status.PENDING, new Date(), Color.WHITE);
         game3 = new Game(user2, user3, Status.FINISHED, new Date(), Color.WHITE);
+        game4 = new Game(user2, user3, Status.FINISHED, new Date(), Color.WHITE, state);
     }
 
     @Test
@@ -118,11 +119,11 @@ public class GameControllerTest {
         userRepository.save(user2);
         userRepository.save(user3);
 
-        SsEmitter.getSseEmitterMap().put(game3.getPlayerTwo().getId(), new SseEmitter());
+        SsEmitter.getSseEmitterMap().put(game4.getPlayerTwo().getId(), new SseEmitter());
 
         mockMvc.perform(post("/game/new")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(game3))
+                .content(objectMapper.writeValueAsString(game4))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
     }
