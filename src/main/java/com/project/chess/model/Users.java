@@ -1,5 +1,6 @@
 package com.project.chess.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.project.chess.model.dto.ActiveUserDto;
 import com.project.chess.model.dto.UsersDto;
 import lombok.AllArgsConstructor;
