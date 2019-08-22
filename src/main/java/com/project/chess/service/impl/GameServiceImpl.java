@@ -53,12 +53,12 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public MyGameDto createGame(Game game) {
-        game.setPlayerOne(userService.getUserById(game.getPlayerOne().getId()));
-        game.setPlayerTwo(userService.getUserById(game.getPlayerTwo().getId()));
+        game.setPlayerOne(userService.getUserByUsername(game.getPlayerOne().getUsername()));
+        game.setPlayerTwo(userService.getUserByUsername(game.getPlayerTwo().getUsername()));
         game.setLastState(new State(new Board().getFen()));
         game.setPGN("");
         gameRepository.save(game);
-        return new MyGameDto(game.getId(), game.getPlayerTwo().getUsername(), game.getStatus(), game.getStartedDate(), game.getLastState().getFEN(), game.getPGN());
+        return new MyGameDto(game.getId(), game.getPlayerTwo().getDisplayName(), game.getStatus(), game.getStartedDate(), game.getLastState().getFEN(), game.getPGN());
 
     }
 

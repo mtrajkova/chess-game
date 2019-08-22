@@ -33,7 +33,7 @@ public class MyGameDto {
     }
 
     public static MyGameDto fromGame(Game game) {
-        MyGameDto myGameDto = new MyGameDto(game.getId(), game.getPlayerTwo().getUsername(), game.getStatus(), game.getStartedDate(), game.getLastState().getFEN(), game.getPGN());
+        MyGameDto myGameDto = new MyGameDto(game.getId(), game.getPlayerTwo().getDisplayName(), game.getStatus(), game.getStartedDate(), game.getLastState().getFEN(), game.getPGN());
         return myGameDto;
     }
 
