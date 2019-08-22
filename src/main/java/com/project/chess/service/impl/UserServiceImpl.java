@@ -97,6 +97,11 @@ public class UserServiceImpl implements UserService {
         return new UsersDto(user);
     }
 
+    @Override
+    public void logout(String username) {
+        updateUserActivityStatus(username, false);
+    }
+
     private Authentication authenticateUser(UsersDto requestUser) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(requestUser.getUsername(), requestUser.getPassword());

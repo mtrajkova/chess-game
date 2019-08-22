@@ -22,4 +22,6 @@ public interface UserService {
     Set<Users> getAllUsersExceptMe(String myUsername);
 
     UsersDto login(UsersDto requestUser);
+
+    void logout(String username);
 }
