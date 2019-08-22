@@ -1,6 +1,7 @@
 package com.project.chess.service;
 
 import com.project.chess.model.Users;
+import com.project.chess.model.dto.JwtAuthenticationResponse;
 import com.project.chess.model.dto.UsersDto;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public interface UserService {
 
     Set<Users> getAllUsersExceptMe(String myUsername);
 
-    UsersDto login(UsersDto requestUser);
+    JwtAuthenticationResponse login(UsersDto requestUser);
 
     void logout(String username);
 }

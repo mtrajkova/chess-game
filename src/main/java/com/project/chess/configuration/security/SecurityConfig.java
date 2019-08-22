@@ -1,6 +1,8 @@
 package com.project.chess.configuration.security;
 
 import com.project.chess.configuration.PasswordEncoder;
+//import com.project.chess.configuration.security.jwt.JWTAuthenticationFilter;
+import com.project.chess.configuration.security.jwt.JWTAuthorizationFilter;
 import com.project.chess.service.impl.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,10 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .cors()
-                .and()
-                .csrf().disable()
+        http.cors().and().csrf().disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(this.restAuthenticationEntryPoint)
                 .and()
@@ -46,6 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .anyRequest().authenticated()
                 .anyRequest().permitAll()
                 .and()
+//                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

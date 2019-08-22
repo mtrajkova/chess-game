@@ -3,6 +3,9 @@ package com.project.chess.service.impl;
 import com.project.chess.exception.UserAlreadyExistsException;
 import com.project.chess.exception.UserNotFoundException;
 import com.project.chess.model.Users;
+import com.project.chess.model.dto.ActiveUserDto;
+import com.project.chess.model.dto.JwtAuthenticationResponse;
+import com.project.chess.configuration.security.jwt.JWTProvider;
 import com.project.chess.model.dto.UsersDto;
 import com.project.chess.repository.UserRepository;
 import com.project.chess.service.UserService;
@@ -18,20 +21,26 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 
+import static com.project.chess.configuration.security.SecurityConstants.HEADER_STRING;
+import static com.project.chess.configuration.security.SecurityConstants.TOKEN_PREFIX;
+
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final JWTProvider tokenProvider;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            BCryptPasswordEncoder bCryptPasswordEncoder,
-                           AuthenticationManager authenticationManager) {
+                           AuthenticationManager authenticationManager,
+                           JWTProvider tokenProvider) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.authenticationManager = authenticationManager;
+        this.tokenProvider = tokenProvider;
     }
 
     @Override
@@ -88,13 +97,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UsersDto login(UsersDto requestUser) {
+    public JwtAuthenticationResponse login(UsersDto requestUser) {
         Authentication authentication = authenticateUser(requestUser);
         Users user = (Users) authentication.getPrincipal();
 
         updateUserStatusOnLogin(user);
 
-        return new UsersDto(user);
+        String jwt = TOKEN_PREFIX.concat(tokenProvider.generateToken(user.getUsername()));
+        ActiveUserDto activeUserDto = new ActiveUserDto(user.getUsername(), user.getDisplayName(), user.isLoggedIn());
+
+        return new JwtAuthenticationResponse(activeUserDto, HEADER_STRING, jwt);
     }
 
     @Override
@@ -107,6 +119,7 @@ public class UserServiceImpl implements UserService {
                 new UsernamePasswordAuthenticationToken(requestUser.getUsername(), requestUser.getPassword());
 
         Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
+
         SecurityContext securityContext = SecurityContextHolder.getContext();
         securityContext.setAuthentication(authentication);
 

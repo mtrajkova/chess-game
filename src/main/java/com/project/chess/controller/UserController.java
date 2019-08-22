@@ -3,6 +3,7 @@ package com.project.chess.controller;
 
 import com.project.chess.model.Users;
 import com.project.chess.model.dto.ActiveUserDto;
+import com.project.chess.model.dto.JwtAuthenticationResponse;
 import com.project.chess.model.dto.UsersDto;
 import com.project.chess.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +46,10 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UsersDto requestedUser) {
         try {
-            UsersDto loggedInUser = userService.login(requestedUser);
-            return new ResponseEntity<>(loggedInUser, HttpStatus.OK);
+            JwtAuthenticationResponse loggedInUser = userService.login(requestedUser);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .headers(loggedInUser.getHttpHeaders())
+                    .body(loggedInUser.getActiveUserDto());
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
