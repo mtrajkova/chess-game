@@ -75,13 +75,13 @@ public class GameServiceImplTest {
                 .withStatus(Status.FINISHED);
     }
 
-    /*@Test
+    @Test
     public void getGameById() {
 
         when(gameRepository.findById(game1.getId())).thenReturn(Optional.of(game1));
         Game foundGame = gameService.getGameById(game1.getId());
         assertThat(foundGame, is(equalTo(game1)));
-    }*/
+    }
 
     @Test
     public void getAllGamesByUser() {
