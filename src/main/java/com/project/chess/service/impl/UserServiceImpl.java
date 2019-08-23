@@ -82,6 +82,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Users updateUserActivityStatus(String username, boolean status) {
+        Users forEditing = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("The user with username: " + username + " does not exist"));
+
+        forEditing.setLoggedIn(status);
+        userRepository.save(forEditing);
+        return forEditing;
+    }
+
+    @Override
     public Set<Users> getAllUsersExceptMe(String myUsername) {
         return userRepository.findAllByUsernameNot(myUsername);
     }
@@ -102,14 +112,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void logout(String username) {
         updateUserActivityStatus(username, false);
-    }
-
-    private void updateUserActivityStatus(String username, boolean status) {
-        Users forEditing = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("The user with username: " + username + " does not exist"));
-
-        forEditing.setLoggedIn(status);
-        userRepository.save(forEditing);
     }
 
     private Authentication authenticateUser(UsersDto requestUser) {
