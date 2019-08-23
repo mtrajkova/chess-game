@@ -41,6 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
 
     private static final String URL_USER_REGISTRATION = "/register";
+    private static final String URL_USER_LOGIN = "/login";
     private static final String URL_GET_ALL_USERS_EXCEPT_ME = "/users/ntomikj@endava.com/opponents";
     private static final String URL_GAMES_FOR_USER = "/users/{id}/games";
 
@@ -57,6 +58,9 @@ public class UserControllerTest {
     private UsersDto userTest1;
     private UsersDto userTest2;
     private UsersDto userTest3;
+    private UsersDto userBeforeTest1;
+    private UsersDto userBeforeTest2;
+    private UsersDto userBeforeTest3;
     private Users user1;
     private Users user2;
     private Users user3;
@@ -74,9 +78,9 @@ public class UserControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         state = new State("Blablablalba");
 
-        UsersDto userBeforeTest1 = new UsersDto("ntomikj@endava.com", "Pass123!", "ntomikj", "Pass123!");
-        UsersDto userBeforeTest2 = new UsersDto("siloski@endava.com", "Pass123!", "siloski", "Pass123!");
-        UsersDto userBeforeTest3 = new UsersDto("elashkoska@endava.com", "Pass123!", "elashkoska", "Pass123!");
+        userBeforeTest1 = new UsersDto("ntomikj@endava.com", "Pass123!", "ntomikj", "Pass123!");
+        userBeforeTest2 = new UsersDto("siloski@endava.com", "Pass123!", "siloski", "Pass123!");
+        userBeforeTest3 = new UsersDto("elashkoska@endava.com", "Pass123!", "elashkoska", "Pass123!");
 
         userRepository.save(Users.fromUsersDto(userBeforeTest1));
         userRepository.save(Users.fromUsersDto(userBeforeTest2));
@@ -122,11 +126,10 @@ public class UserControllerTest {
                 .accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
                 .andExpect(content().string(containsString("Email is not valid")));
 
-
     }
 
     @Test
-    public void login() {
+    public void login()  {
 
 
     }
@@ -139,10 +142,15 @@ public class UserControllerTest {
 
         String content = mvcResult.getResponse().getContentAsString();
 
-        Type founderListType = new TypeToken<ArrayList<ActiveUserDto>>(){}.getType();
+        Type founderListType = new TypeToken<ArrayList<ActiveUserDto>>() {}.getType();
 
         List<ActiveUserDto> returnedActiveUsersDto = gson.fromJson(content, founderListType);
 
+        Users testUser = Users.fromUsersDto(userBeforeTest1);
+
+        ActiveUserDto testActiveUserDto = ActiveUserDto.fromUsers(testUser);
+
+        assertThat(returnedActiveUsersDto.contains(testActiveUserDto)).isEqualTo(false);
         assertThat(returnedActiveUsersDto.size()).isEqualTo(2);
 
     }
