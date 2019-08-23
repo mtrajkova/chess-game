@@ -1,0 +1,13 @@
+POST /users/ -> adds new user
+GET /users/id
+DELETE /users/id
+
+GET /users/id/games
+
+/login
+/register
+
+GET /games -> all games
+POST /games -> new game
+GET /games/id ->
+

@@ -5,7 +5,9 @@ import com.project.chess.exception.GlobalExceptionHandler;
 import com.project.chess.model.Users;
 import com.project.chess.model.dto.ActiveUserDto;
 import com.project.chess.model.dto.JwtAuthenticationResponse;
+import com.project.chess.model.dto.MyGameDto;
 import com.project.chess.model.dto.UsersDto;
+import com.project.chess.service.GameService;
 import com.project.chess.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -22,17 +24,19 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/user")
 public class UserController extends GlobalExceptionHandler {
 
     private final UserService userService;
 
+    private final GameService gameService;
+
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, GameService gameService) {
         this.userService = userService;
+        this.gameService = gameService;
     }
 
-    @PostMapping("/registration")
+    @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UsersDto user, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -57,14 +61,19 @@ public class UserController extends GlobalExceptionHandler {
         }
     }
 
-    @GetMapping("/get-all-users/{username}")
+    @GetMapping(value = "/users/{id}/games")
+    public ResponseEntity<List<MyGameDto>> getAllGamesForUser(@PathVariable(value = "id") Long id) {
+        return new ResponseEntity<>(gameService.getAllGamesByUser(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{username}/opponents")
     public ResponseEntity findAllUsersExceptMe(@PathVariable(value = "username") String username) {
         List<ActiveUserDto> displayUsers = userService.getAllUsersExceptMe(username).stream()
                 .map(ActiveUserDto::fromUsers).collect(Collectors.toList());
         return new ResponseEntity<>(displayUsers, HttpStatus.OK);
     }
 
-    @GetMapping("/get-all-users")
+    @GetMapping("/users")
     public ResponseEntity findAllUsers() {
         List<ActiveUserDto> displayUsers = userService.getAllUsers().stream()
                 .map(ActiveUserDto::fromUsers).collect(Collectors.toList());

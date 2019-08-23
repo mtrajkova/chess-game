@@ -18,7 +18,7 @@ import java.util.List;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/game")
+@RequestMapping("/games")
 public class GameController extends GlobalExceptionHandler {
 
     private final GameService gameService;
@@ -40,12 +40,7 @@ public class GameController extends GlobalExceptionHandler {
         return gameService.getEmmiterToUser(id);
     }
 
-    @GetMapping(value = "/user-games/{id}")
-    public ResponseEntity<List<MyGameDto>> getAllGamesForUser(@PathVariable(value = "id") Long id) {
-        return new ResponseEntity<>(gameService.getAllGamesByUser(id), HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/new")
+    @PostMapping
     public ResponseEntity<MyGameDto> sendRequestForGame(@RequestBody Game game) {
         MyGameDto myGameDto = gameService.createGame(game);
         try {
@@ -56,8 +51,8 @@ public class GameController extends GlobalExceptionHandler {
         return new ResponseEntity<>(myGameDto, HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/update")
-    public ResponseEntity<Game> updateGameStatus(@RequestParam(value = "id") Long id, @RequestParam(value = "status") Status status) {
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Game> updateGameStatus(@PathVariable(value = "id") Long id, @RequestParam(value = "status") Status status) {
         Game updatedGame = gameService.updateGameStatus(status, id);
         return new ResponseEntity<>(updatedGame, HttpStatus.OK);
     }

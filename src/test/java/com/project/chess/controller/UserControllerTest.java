@@ -2,9 +2,10 @@ package com.project.chess.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.project.chess.model.Users;
+import com.project.chess.model.*;
 import com.project.chess.model.dto.ActiveUserDto;
 import com.project.chess.model.dto.UsersDto;
+import com.project.chess.repository.GameRepository;
 import com.project.chess.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,8 +38,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserControllerTest {
 
-    private static final String URL_USER_REGISTRATION = "/user/registration";
-    private static final String URL_GET_ALL_USERS_EXCEPT_ME = "/user/get-all-users/ntomikj@endava.com";
+    private static final String URL_USER_REGISTRATION = "/register";
+    private static final String URL_GET_ALL_USERS_EXCEPT_ME = "/users/ntomikj@endava.com/opponents";
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -46,10 +47,21 @@ public class UserControllerTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private GameRepository gameRepository;
+
     private MockMvc mockMvc;
     private UsersDto userTest1;
     private UsersDto userTest2;
     private UsersDto userTest3;
+    private Users user1;
+    private Users user2;
+    private Users user3;
+    private Game game1;
+    private Game game2;
+    private Game game3;
+    private Game game4;
+    private State state;
     private Gson gson;
 
     @Before
@@ -57,6 +69,7 @@ public class UserControllerTest {
 
         gson = new Gson();
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        state = new State("Blablablalba");
 
         UsersDto userBeforeTest1 = new UsersDto("ntomikj@endava.com", "Pass123!", "ntomikj", "Pass123!");
         UsersDto userBeforeTest2 = new UsersDto("siloski@endava.com", "Pass123!", "siloski", "Pass123!");
@@ -65,6 +78,16 @@ public class UserControllerTest {
         userRepository.save(Users.fromUsersDto(userBeforeTest1));
         userRepository.save(Users.fromUsersDto(userBeforeTest2));
         userRepository.save(Users.fromUsersDto(userBeforeTest3));
+
+        user1 = new Users("tomikj@endava.com", "tomikj", "pass123", true);
+        user2 = new Users("nastevski@endava.com", "nastevski", "111111", false);
+        user3 = new Users("gjorgjiev@endava.com", "gjorgjiev", "654321", true);
+
+        game1 = new Game(user1, user2, Status.ACTIVE, new Date(), Color.BLACK, new State(state));
+        game2 = new Game(user1, user3, Status.PENDING, new Date(), Color.WHITE, new State(state));
+        game3 = new Game(user2, user3, Status.FINISHED, new Date(), Color.WHITE, new State(state));
+        game4 = new Game(user2, user3, Status.FINISHED, new Date(), Color.WHITE, new State(state));
+
 
       /*  userTest1 = new Users("vsrbinovski@endava.com", "vsrbinovski", "Pass123!", true);
         userTest2 = new Users("knastevski@endava.com", "knastevski", "P111111!", true);
@@ -125,6 +148,25 @@ public class UserControllerTest {
 
         assertThat(returnedActiveUsersDto.size()).isEqualTo(2);
 
+    }
+
+        @Test
+    public void getAllGamesForUser() throws Exception {
+
+        userRepository.save(user1);
+        userRepository.save(user2);
+        userRepository.save(user3);
+
+        game1.setInviter(userRepository.findByUsername(user1.getUsername()).get().getId());
+        gameRepository.save(game1);
+        game2.setInviter(userRepository.findByUsername(user1.getUsername()).get().getId());
+        gameRepository.save(game2);
+        game3.setInviter(userRepository.findByUsername(user2.getUsername()).get().getId());
+        gameRepository.save(game3);
+
+        mockMvc.perform(get("/users/{id}/games", user2.getId())
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk());
 
     }
 }

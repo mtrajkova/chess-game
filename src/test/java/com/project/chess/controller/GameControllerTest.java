@@ -78,7 +78,7 @@ public class GameControllerTest {
         userRepository.save(user2);
         gameRepository.save(game1);
 
-        mockMvc.perform(get("/game/{id}", game1.getId())
+        mockMvc.perform(get("/games/{id}", game1.getId())
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(game1.getId()))
@@ -88,25 +88,7 @@ public class GameControllerTest {
                 .andExpect(jsonPath("$.playerOneColor").value(game1.getPlayerOneColor().toString()));
     }
 
-    @Test
-    public void getAllGamesForUser() throws Exception {
 
-        userRepository.save(user1);
-        userRepository.save(user2);
-        userRepository.save(user3);
-
-        game1.setInviter(userRepository.findByUsername(user1.getUsername()).get().getId());
-        gameRepository.save(game1);
-        game2.setInviter(userRepository.findByUsername(user1.getUsername()).get().getId());
-        gameRepository.save(game2);
-        game3.setInviter(userRepository.findByUsername(user2.getUsername()).get().getId());
-        gameRepository.save(game3);
-
-        mockMvc.perform(get("/game/user-games/{id}", user2.getId())
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk());
-
-    }
 
     @Test
     public void sendRequestForGame() throws Exception {
@@ -116,7 +98,7 @@ public class GameControllerTest {
 
         SsEmitter.getSseEmitterMap().put(game4.getPlayerTwo().getId(), new SseEmitter());
 
-        mockMvc.perform(post("/game/new")
+        mockMvc.perform(post("/games")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(game4))
                 .accept(MediaType.APPLICATION_JSON))
@@ -130,9 +112,8 @@ public class GameControllerTest {
         userRepository.save(user2);
         gameRepository.save(game1);
 
-        mockMvc.perform(put("/game/update")
+        mockMvc.perform(put("/games/{id}", game1.getId().toString())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .param("id", game1.getId().toString())
                 .param("status", Status.FINISHED.toString())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

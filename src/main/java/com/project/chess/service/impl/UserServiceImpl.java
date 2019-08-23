@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Users createUser(Users newUser) {
         if (userRepository.findByUsername(newUser.getUsername()).isPresent()) {
-            throw new UserAlreadyExistsException("The user with display name: " + newUser.getUsername() + " already exists");
+            throw new UserAlreadyExistsException("The user with username: " + newUser.getUsername() + " already exists");
         }
         if (userRepository.findByDisplayName(newUser.getDisplayName()).isPresent()) {
             throw new UserAlreadyExistsException("The user with display name: " + newUser.getDisplayName() + " already exists");
