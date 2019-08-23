@@ -2,11 +2,13 @@ package com.project.chess.service.impl;
 
 import com.github.bhlangonijr.chesslib.Board;
 import com.project.chess.exception.GameNotFoundException;
+import com.project.chess.exception.UserNotFoundException;
 import com.project.chess.model.Game;
 import com.project.chess.model.State;
 import com.project.chess.model.Status;
 import com.project.chess.model.dto.MyGameDto;
 import com.project.chess.repository.GameRepository;
+import com.project.chess.repository.UserRepository;
 import com.project.chess.service.GameService;
 import com.project.chess.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +22,15 @@ public class GameServiceImpl implements GameService {
 
     private final GameRepository gameRepository;
     private final UserService userService;
+    private final UserRepository userRepository;
 
     //private static Map<Long, SseEmitter> sseEmitterMap = Collections.synchronizedMap(new HashMap<>());
 
     @Autowired
-    public GameServiceImpl(GameRepository gameRepository, UserServiceImpl userService) {
+    public GameServiceImpl(GameRepository gameRepository, UserServiceImpl userService, UserRepository userRepository) {
         this.gameRepository = gameRepository;
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -37,6 +41,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public List<MyGameDto> getAllGamesByUser(Long userId) {
+        userRepository.findById(userId).orElseThrow(()->new UserNotFoundException(userId));
         List<MyGameDto> myGameDtos = new ArrayList<>();
         List<Game> gamesWithUsers = gameRepository.findAllByPlayerOneIdOrPlayerTwoId(userId, userId);
         for (Game game : gamesWithUsers) {
