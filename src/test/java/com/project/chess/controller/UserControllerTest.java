@@ -40,6 +40,7 @@ public class UserControllerTest {
 
     private static final String URL_USER_REGISTRATION = "/register";
     private static final String URL_GET_ALL_USERS_EXCEPT_ME = "/users/ntomikj@endava.com/opponents";
+    private static final String URL_GAMES_FOR_USER = "/users/{id}/games";
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -164,7 +165,7 @@ public class UserControllerTest {
         game3.setInviter(userRepository.findByUsername(user2.getUsername()).get().getId());
         gameRepository.save(game3);
 
-        mockMvc.perform(get("/users/{id}/games", user2.getId())
+        mockMvc.perform(get(URL_GAMES_FOR_USER, user2.getId())
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
 

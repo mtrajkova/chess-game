@@ -1,5 +1,6 @@
 POST /users/ -> adds new user
 GET /users/id
+GET /users/id/opponents
 DELETE /users/id
 
 GET /users/id/games

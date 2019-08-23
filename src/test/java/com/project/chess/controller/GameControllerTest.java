@@ -3,7 +3,6 @@ package com.project.chess.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.chess.model.*;
 import com.project.chess.repository.GameRepository;
-import com.project.chess.repository.StateRepository;
 import com.project.chess.repository.UserRepository;
 import com.project.chess.service.impl.SsEmitter;
 import org.junit.Before;
@@ -32,6 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
 public class GameControllerTest {
+
+    private static final String URL_GAME = "/games/{id}";
+    private static final String URL_GAMES = "/games";
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -78,7 +80,7 @@ public class GameControllerTest {
         userRepository.save(user2);
         gameRepository.save(game1);
 
-        mockMvc.perform(get("/games/{id}", game1.getId())
+        mockMvc.perform(get(URL_GAME, game1.getId())
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(game1.getId()))
@@ -98,7 +100,7 @@ public class GameControllerTest {
 
         SsEmitter.getSseEmitterMap().put(game4.getPlayerTwo().getId(), new SseEmitter());
 
-        mockMvc.perform(post("/games")
+        mockMvc.perform(post(URL_GAMES)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(game4))
                 .accept(MediaType.APPLICATION_JSON))
@@ -112,7 +114,7 @@ public class GameControllerTest {
         userRepository.save(user2);
         gameRepository.save(game1);
 
-        mockMvc.perform(put("/games/{id}", game1.getId().toString())
+        mockMvc.perform(put(URL_GAME, game1.getId().toString())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .param("status", Status.FINISHED.toString())
                 .accept(MediaType.APPLICATION_JSON))
