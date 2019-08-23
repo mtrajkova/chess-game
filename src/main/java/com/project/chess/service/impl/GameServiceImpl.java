@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class GameServiceImpl implements GameService {
@@ -22,7 +21,7 @@ public class GameServiceImpl implements GameService {
     private final GameRepository gameRepository;
     private final UserService userService;
 
-    private static Map<Long, SseEmitter> sseEmitterMap = Collections.synchronizedMap(new HashMap<>());
+    //private static Map<Long, SseEmitter> sseEmitterMap = Collections.synchronizedMap(new HashMap<>());
 
     @Autowired
     public GameServiceImpl(GameRepository gameRepository, UserServiceImpl userService) {
@@ -39,16 +38,11 @@ public class GameServiceImpl implements GameService {
     @Override
     public List<MyGameDto> getAllGamesByUser(Long userId) {
         List<MyGameDto> myGameDtos = new ArrayList<>();
-//               myGameDtos = gameRepository.findAllByPlayerOneIdOrPlayerTwoId(userId,userId)
-//                .stream()
-//                       .map(game -> new MyGameDto(game.getId(),game.getPlayerTwo().getUsername(),game.getStatus(),game.getStartedDate(),game.getLastState().getFEN()))
-//                .collect(Collectors.toList());
         List<Game> gamesWithUsers = gameRepository.findAllByPlayerOneIdOrPlayerTwoId(userId, userId);
         for (Game game : gamesWithUsers) {
-            myGameDtos.add(MyGameDto.fromGame(game));
+            myGameDtos.add(MyGameDto.fromGame(game, userId));
         }
         return myGameDtos;
-        //return gameRepository.findAllByPlayerOneIdOrPlayerTwoId(userId, userId);
     }
 
     @Override
@@ -57,8 +51,9 @@ public class GameServiceImpl implements GameService {
         game.setPlayerTwo(userService.getUserByUsername(game.getPlayerTwo().getUsername()));
         game.setLastState(new State(new Board().getFen()));
         game.setPGN("");
+        game.setInviter(userService.getUserByUsername(game.getPlayerOne().getUsername()).getId());
         gameRepository.save(game);
-        return new MyGameDto(game.getId(), game.getPlayerTwo().getDisplayName(), game.getStatus(), game.getStartedDate(), game.getLastState().getFEN(), game.getPGN());
+        return new MyGameDto(game.getId(), game.getPlayerOne().getDisplayName(), game.getStatus(), game.getStartedDate(), game.getLastState().getFEN(), game.getPGN());
 
     }
 

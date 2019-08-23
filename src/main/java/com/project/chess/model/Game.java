@@ -1,6 +1,5 @@
 package com.project.chess.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.experimental.Wither;
 
@@ -23,7 +22,7 @@ public class Game {
     @ManyToOne
     @NotNull
     private Users playerTwo;
-
+    private Long inviter;
     private Status status;
     private Date startedDate;
     private Color playerOneColor;
@@ -45,16 +44,17 @@ public class Game {
         this.lastState = original.lastState;
     }
 
-    public Game(Users playerOne, Users playerTwo, Status status, Date startedDate, Color playerOneColor, State lastState ) {
+    public Game(Users playerOne, Users playerTwo, Status status, Date startedDate, Color playerOneColor, State lastState) {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         this.status = status;
         this.startedDate = startedDate;
         this.playerOneColor = playerOneColor;
-        this.lastState=lastState;
+        this.lastState = lastState;
+
     }
 
-    public Game(Users playerOne, Users playerTwo, Status status, Date startedDate, Color playerOneColor ) {
+    public Game(Users playerOne, Users playerTwo, Status status, Date startedDate, Color playerOneColor) {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         this.status = status;
@@ -67,6 +67,14 @@ public class Game {
         this.playerTwo = playerTwo;
         this.status = status;
         this.playerOneColor = playerOneColor;
+    }
+
+    public Long getInviter() {
+        return inviter;
+    }
+
+    public void setInviter(Long inviter) {
+        this.inviter = inviter;
     }
 
     public String getPGN() {

@@ -45,9 +45,6 @@ public class GameControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private StateRepository stateRepository;
-
     private MockMvc mockMvc;
     private Users user1;
     private Users user2;
@@ -98,23 +95,17 @@ public class GameControllerTest {
         userRepository.save(user2);
         userRepository.save(user3);
 
+        game1.setInviter(userRepository.findByUsername(user1.getUsername()).get().getId());
         gameRepository.save(game1);
+        game2.setInviter(userRepository.findByUsername(user1.getUsername()).get().getId());
         gameRepository.save(game2);
+        game3.setInviter(userRepository.findByUsername(user2.getUsername()).get().getId());
         gameRepository.save(game3);
 
         mockMvc.perform(get("/game/user-games/{id}", user2.getId())
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
-                /*.andExpect(jsonPath("$[0].id").value(game1.getId()))
-                .andExpect(jsonPath("$[0].playerOne.id").value(game1.getPlayerOne().getId()))
-                .andExpect(jsonPath("$[0].opponentName").value(game1.getPlayerTwo().getUsername()))
-                .andExpect(jsonPath("$[0].status").value(game1.getStatus().toString()))
-                .andExpect(jsonPath("$[0].playerOneColor").value(game1.getPlayerOneColor().toString()))
-                .andExpect(jsonPath("$[1].id").value(game3.getId()))
-                .andExpect(jsonPath("$[1].playerOne.id").value(game3.getPlayerOne().getId()))
-                .andExpect(jsonPath("$[1].playerTwo.id").value(game3.getPlayerTwo().getUsername()))
-                .andExpect(jsonPath("$[1].status").value(game3.getStatus().toString()))
-                .andExpect(jsonPath("$[1].playerOneColor").value(game3.getPlayerOneColor().toString()));*/
+
     }
 
     @Test

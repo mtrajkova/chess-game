@@ -1,5 +1,6 @@
 package com.project.chess.service.impl;
 
+import com.github.bhlangonijr.chesslib.Board;
 import com.project.chess.model.Game;
 import com.project.chess.model.State;
 import com.project.chess.model.Status;
@@ -54,30 +55,41 @@ public class GameServiceImplTest {
 
         Users user1 = new Users()
                 .withId(1L)
-                .withUsername("nikola");
+                .withUsername("nikola")
+                .withDisplayName("nikola");
         user2 = new Users()
                 .withId(2L)
                 .withUsername("marija");
         Users user3 = new Users()
                 .withId(3L)
-                .withUsername("slavche");
+                .withUsername("slavche")
+                .withDisplayName("slavche");
 
         game1 = new Game()
                 .withId(1L)
                 .withPlayerOne(user1)
                 .withPlayerTwo(user2)
-                .withStatus(Status.ACTIVE);
+                .withStatus(Status.ACTIVE)
+                .withInviter(user1.getId())
+                .withPGN("")
+                .withLastState(new State(new Board().getFen()));
         game2 = new Game()
                 .withId(2L)
                 .withPlayerOne(user1)
                 .withPlayerTwo(user3)
                 .withStatus(Status.ACTIVE)
-                .withLastState(state);
+                .withLastState(state)
+                .withInviter(user1.getId())
+                .withPGN("")
+                .withLastState(new State(new Board().getFen()));
         game3 = new Game()
                 .withId(3L)
                 .withPlayerOne(user2)
                 .withPlayerTwo(user3)
-                .withStatus(Status.FINISHED);
+                .withStatus(Status.FINISHED)
+                .withInviter(user2.getId())
+                .withPGN("")
+                .withLastState(new State(new Board().getFen()));
     }
 
     @Test
@@ -93,17 +105,17 @@ public class GameServiceImplTest {
 
         when(gameRepository.findAllByPlayerOneIdOrPlayerTwoId(user2.getId(), user2.getId())).thenReturn(Stream.of(game1, game3).collect(Collectors.toList()));
         List<MyGameDto> foundGames = gameService.getAllGamesByUser(user2.getId());
-        //assertThat(foundGames, is(equalTo(Stream.of(game1, game3).collect(Collectors.toList()))));
+        assertThat(foundGames.get(0).getOpponentName(),is(equalTo(game1.getPlayerOne().getDisplayName())));
     }
 
     @Test
     public void createGame() {
 
-        when(userService.getUserById(game2.getPlayerOne().getId())).thenReturn(game2.getPlayerOne());
-        when(userService.getUserById(game2.getPlayerTwo().getId())).thenReturn(game2.getPlayerTwo());
+        when(userService.getUserByUsername(game2.getPlayerOne().getUsername())).thenReturn(game2.getPlayerOne());
+        when(userService.getUserByUsername(game2.getPlayerTwo().getUsername())).thenReturn(game2.getPlayerTwo());
         when(gameRepository.save(game2)).thenReturn(game2);
         MyGameDto createdGame = gameService.createGame(game2);
-        assertThat(createdGame.getOpponentName(), is(equalTo(game2.getPlayerTwo().getUsername())));
+        assertThat(createdGame.getOpponentName(), is(equalTo(game2.getPlayerOne().getDisplayName())));
         assertThat(createdGame.getStatus(), is(equalTo(game2.getStatus())));
     }
 

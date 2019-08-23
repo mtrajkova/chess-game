@@ -1,7 +1,8 @@
 package com.project.chess.model;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 public class State {
@@ -11,14 +12,16 @@ public class State {
 
     private String FEN;
 
-    public State(){}
+    public State() {
+    }
 
     public State(String FEN) {
 
         this.FEN = FEN;
     }
+
     // only for test
-    public State(State original){
+    public State(State original) {
         this.id = original.id;
         this.FEN = original.FEN;
     }

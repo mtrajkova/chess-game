@@ -32,9 +32,11 @@ public class MyGameDto {
         this.dateStarted = dateStarted;
     }
 
-    public static MyGameDto fromGame(Game game) {
-        MyGameDto myGameDto = new MyGameDto(game.getId(), game.getPlayerTwo().getDisplayName(), game.getStatus(), game.getStartedDate(), game.getLastState().getFEN(), game.getPGN());
-        return myGameDto;
+    public static MyGameDto fromGame(Game game, Long userId) {
+        if (game.getInviter().equals(userId)) {
+            return new MyGameDto(game.getId(), game.getPlayerTwo().getDisplayName(), game.getStatus(), game.getStartedDate(), game.getLastState().getFEN(), game.getPGN());
+        }
+        return new MyGameDto(game.getId(), game.getPlayerOne().getDisplayName(), game.getStatus(), game.getStartedDate(), game.getLastState().getFEN(), game.getPGN());
     }
 
     public String getPGN() {
