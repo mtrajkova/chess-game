@@ -22,7 +22,7 @@ public class PlayGameServiceImpl implements PlayGameService {
     @Override
     public MoveResponseDto startGame(Long gameId) throws MoveGeneratorException {
 
-        Game game = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException("Game " + gameId + " does not exist!"));
+        Game game = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
 
         game.setStatus(Status.ACTIVE);
 

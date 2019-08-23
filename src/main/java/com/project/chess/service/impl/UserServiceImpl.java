@@ -18,7 +18,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.project.chess.configuration.security.SecurityConstants.HEADER_STRING;
@@ -51,13 +53,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public Users getUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("The user with id: " + id + " does not exist"));
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @Override
     public Users createUser(Users newUser) {
         if (userRepository.findByUsername(newUser.getUsername()).isPresent()) {
-            throw new UserAlreadyExistsException("The user with username: " + newUser.getUsername() + " already exists");
+            throw new UserAlreadyExistsException("The user with display name: " + newUser.getUsername() + " already exists");
         }
         if (userRepository.findByDisplayName(newUser.getDisplayName()).isPresent()) {
             throw new UserAlreadyExistsException("The user with display name: " + newUser.getDisplayName() + " already exists");
@@ -69,7 +71,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Users deleteUser(String username) {
         Users toBeDeleted = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("The user with username: " + username + " does not exist"));
+                .orElseThrow(() -> new UserNotFoundException(username));
 
         userRepository.delete(toBeDeleted);
         return toBeDeleted;
@@ -78,13 +80,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public Users getUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("The user with username: " + username + " does not exist"));
+                .orElseThrow(() -> new UserNotFoundException(username));
     }
 
     @Override
     public Users updateUserActivityStatus(String username, boolean status) {
         Users forEditing = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("The user with username: " + username + " does not exist"));
+                .orElseThrow(() -> new UserNotFoundException(username));
 
         forEditing.setLoggedIn(status);
         userRepository.save(forEditing);
@@ -93,6 +95,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<Users> getAllUsersExceptMe(String myUsername) {
+        userRepository.findByUsername(myUsername).orElseThrow(() -> new UserNotFoundException(myUsername));
         return userRepository.findAllByUsernameNot(myUsername);
     }
 

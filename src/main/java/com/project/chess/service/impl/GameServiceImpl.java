@@ -32,7 +32,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public Game getGameById(Long id) {
         return gameRepository.findById(id)
-                .orElseThrow(() -> new GameNotFoundException("Game " + id + " does not exist!"));
+                .orElseThrow(() -> new GameNotFoundException(id));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class GameServiceImpl implements GameService {
                     game.setStatus(newStatus);
                     return gameRepository.save(game);
                 })
-                .orElseThrow(() -> new GameNotFoundException("Game " + id + " does not exist!"));
+                .orElseThrow(() -> new GameNotFoundException(id));
     }
 
 

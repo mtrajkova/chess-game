@@ -1,8 +1,10 @@
 package com.project.chess.exception;
 
-public class GameNotFoundException extends RuntimeException {
+public class GameNotFoundException extends CustomException {
 
-    public GameNotFoundException(String message) {
-        super(message);
+    public GameNotFoundException(Long id) {
+        super("Game with id " + id + " does not exist");
     }
+
+
 }
