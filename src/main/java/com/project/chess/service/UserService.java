@@ -18,8 +18,6 @@ public interface UserService {
 
     Users getUserByUsername(String username);
 
-    Users updateUserActivityStatus(String username, boolean status);
-
     Set<Users> getAllUsersExceptMe(String myUsername);
 
     JwtAuthenticationResponse login(UsersDto requestUser);
