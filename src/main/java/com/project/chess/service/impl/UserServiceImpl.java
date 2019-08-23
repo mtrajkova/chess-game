@@ -1,6 +1,7 @@
 package com.project.chess.service.impl;
 
-import com.project.chess.exception.UserAlreadyExistsException;
+import com.project.chess.exception.DisplayNameAlreadyExistsException;
+import com.project.chess.exception.UserNameAlreadyExistsException;
 import com.project.chess.exception.UserNotFoundException;
 import com.project.chess.model.Users;
 import com.project.chess.model.dto.ActiveUserDto;
@@ -18,9 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static com.project.chess.configuration.security.SecurityConstants.HEADER_STRING;
@@ -59,10 +58,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Users createUser(Users newUser) {
         if (userRepository.findByUsername(newUser.getUsername()).isPresent()) {
-            throw new UserAlreadyExistsException("The user with username: " + newUser.getUsername() + " already exists");
+            throw new UserNameAlreadyExistsException("The user with username: " + newUser.getUsername() + " already exists");
         }
         if (userRepository.findByDisplayName(newUser.getDisplayName()).isPresent()) {
-            throw new UserAlreadyExistsException("The user with display name: " + newUser.getDisplayName() + " already exists");
+            throw new DisplayNameAlreadyExistsException("The user with display name: " + newUser.getDisplayName() + " already exists");
         }
         newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
         return userRepository.save(newUser);

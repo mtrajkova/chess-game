@@ -3,7 +3,6 @@ package com.project.chess.exception;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 public class GlobalExceptionHandler {
@@ -15,9 +14,18 @@ public class GlobalExceptionHandler {
                 .create();
     }
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<?> handleUserAlreadyExistsException(UserAlreadyExistsException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(UserNameAlreadyExistsException.class)
+    public String handleUserNameAlreadyExistsException(UserNameAlreadyExistsException e) {
+        e.setStatus(HttpStatus.BAD_REQUEST.value());
+        e.setError(HttpStatus.BAD_REQUEST.name());
+        return gson.toJson(e);
+    }
+
+    @ExceptionHandler(DisplayNameAlreadyExistsException.class)
+    public String handleDisplayNameAlreadyExistsException(DisplayNameAlreadyExistsException e) {
+        e.setStatus(HttpStatus.BAD_REQUEST.value());
+        e.setError(HttpStatus.BAD_REQUEST.name());
+        return gson.toJson(e);
     }
 
     @ExceptionHandler(UserNotFoundException.class)

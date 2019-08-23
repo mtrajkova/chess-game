@@ -1,6 +1,7 @@
 package com.project.chess.service.impl;
 
-import com.project.chess.exception.UserAlreadyExistsException;
+import com.project.chess.exception.DisplayNameAlreadyExistsException;
+import com.project.chess.exception.UserNameAlreadyExistsException;
 import com.project.chess.exception.UserNotFoundException;
 import com.project.chess.model.Users;
 import com.project.chess.repository.UserRepository;
@@ -66,7 +67,7 @@ public class UserServiceImplTest {
         assertEquals("encoded$12", returnedUser.getPassword());
     }
 
-    @Test(expected = UserAlreadyExistsException.class)
+    @Test(expected = UserNameAlreadyExistsException.class)
     public void createUserFailOnDuplicateUsername() {
         Mockito.when(userRepository.findByUsername("lala@gmail.com")).thenReturn(Optional.of(user1));
         Users toBeCreated = new Users("lala@gmail.com", "something new", "LOLOLOLOLO", true);
@@ -74,7 +75,7 @@ public class UserServiceImplTest {
         userService.createUser(toBeCreated);
     }
 
-    @Test(expected = UserAlreadyExistsException.class)
+    @Test(expected = DisplayNameAlreadyExistsException.class)
     public void createUserFailOnDuplicateDisplayName() {
         Mockito.when(userRepository.findByUsername("somethingnew@gmail.com")).thenReturn(Optional.empty());
         Mockito.when(userRepository.findByDisplayName("Lala")).thenReturn(Optional.of(user1));
@@ -139,6 +140,7 @@ public class UserServiceImplTest {
         usersWithoutMe.add(user2);
         usersWithoutMe.add(user3);
         Mockito.when(userRepository.findAllByUsernameNot("lala@gmail.com")).thenReturn(new HashSet<>(usersWithoutMe));
+        Mockito.when(userRepository.findByUsername("lala@gmail.com")).thenReturn(Optional.of(user1));
 
         Set<Users> foundUsers = userService.getAllUsersExceptMe("lala@gmail.com");
 
