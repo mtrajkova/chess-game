@@ -28,9 +28,11 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -88,11 +90,6 @@ public class UserControllerTest {
         game2 = new Game(user1, user3, Status.PENDING, new Date(), Color.WHITE, new State(state));
         game3 = new Game(user2, user3, Status.FINISHED, new Date(), Color.WHITE, new State(state));
         game4 = new Game(user2, user3, Status.FINISHED, new Date(), Color.WHITE, new State(state));
-
-
-      /*  userTest1 = new Users("vsrbinovski@endava.com", "vsrbinovski", "Pass123!", true);
-        userTest2 = new Users("knastevski@endava.com", "knastevski", "P111111!", true);
-        userTest3 = new Users("sgjorgjiev@endava.com", "sgjorgjiev", "P654321!", truee);*/
     }
 
     @Test
@@ -115,17 +112,16 @@ public class UserControllerTest {
         mockMvc.perform(post(URL_USER_REGISTRATION)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonUserString2)
-                .accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+                .accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("Password must contain at least 1 uppercase characters. Password must contain at least 1 lowercase characters. Password must contain at least 1 special characters.")));
+
 
         mockMvc.perform(post(URL_USER_REGISTRATION)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonUserString3)
-                .accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+                .accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("Email is not valid")));
 
-/*      Optional<Users> userFromDb = userRepository.findByUsername("vsrbinovski");
-        UsersDto userFromDbToDto = UsersDto.fromUsers(userFromDb);
-
-        assertThat(userTest1.getUsername()).isEqualTo(userFromDb.get().getUsername());*/
 
     }
 
@@ -151,7 +147,7 @@ public class UserControllerTest {
 
     }
 
-        @Test
+    @Test
     public void getAllGamesForUser() throws Exception {
 
         userRepository.save(user1);
