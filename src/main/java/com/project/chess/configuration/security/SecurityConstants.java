@@ -5,18 +5,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SecurityConstants {
-    public static final String LOGIN_URL = "/user/login";
-    public static final String REGISTER_URL = "/user/registration";
+    public static final String LOGIN_URL = "/login";
+    public static final String REGISTER_URL = "/register";
 
-    //  https://www.allkeysgenerator.com/ is used to generate the secret key. Options - Encryption key - 512-bit
     public static String SECRET;
     public static String TOKEN_PREFIX;
     public static String HEADER_STRING;
     public static long EXPIRATION_TIME;
 
     @Value("${jwt.secret}")
-    public void setSECRET(String SECRET) {
-        SecurityConstants.SECRET = SECRET;
+    public void setSecret(String secret) {
+        SECRET = secret;
     }
 
     @Value("${jwt.tokenPrefix}")
