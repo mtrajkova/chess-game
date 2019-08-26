@@ -12,28 +12,23 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @RunWith(SpringRunner.class)
@@ -44,6 +39,7 @@ public class UserControllerTest {
     private static final String URL_USER_LOGIN = "/login";
     private static final String URL_GET_ALL_USERS_EXCEPT_ME = "/users/ntomikj@endava.com/opponents";
     private static final String URL_GAMES_FOR_USER = "/users/{id}/games";
+    private static final String URL_USER_LOGOUT = "/logout";
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -76,6 +72,7 @@ public class UserControllerTest {
 
         gson = new Gson();
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
         state = new State("Blablablalba");
 
         userBeforeTest1 = new UsersDto("ntomikj@endava.com", "Pass123!", "ntomikj", "Pass123!");
@@ -129,9 +126,27 @@ public class UserControllerTest {
     }
 
     @Test
-    public void login()  {
+    public void login() throws Exception {
 
+        userTest1 = new UsersDto("vsrbinovski@endava.com", "Pass123!", "vsrbinovski", "Pass123!");
 
+        String jsonUserString1 = gson.toJson(userTest1);
+
+        mockMvc.perform(post(URL_USER_REGISTRATION)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(jsonUserString1)
+                .accept(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
+
+        Users testUser = Users.fromUsersDto(userTest1);
+        ActiveUserDto activeUserDto = ActiveUserDto.fromUsers(testUser);
+
+        assertThat(activeUserDto.isLoggedIn()).isEqualTo(false);
+
+        mockMvc.perform(post(URL_USER_LOGIN)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(jsonUserString1)
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk())
+                .andExpect(jsonPath("$.loggedIn").value(true));
     }
 
     @Test
@@ -147,7 +162,6 @@ public class UserControllerTest {
         List<ActiveUserDto> returnedActiveUsersDto = gson.fromJson(content, founderListType);
 
         Users testUser = Users.fromUsersDto(userBeforeTest1);
-
         ActiveUserDto testActiveUserDto = ActiveUserDto.fromUsers(testUser);
 
         assertThat(returnedActiveUsersDto.contains(testActiveUserDto)).isEqualTo(false);
