@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.project.chess.configuration.security.SecurityConstants.HEADER_STRING;
@@ -114,6 +115,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void logout(String username) {
         updateUserActivityStatus(username, false);
+        Optional<Users> user = userRepository.findByUsername(username);
+        user.ifPresent(users -> SsEmitter.getSseEmitterMap().remove(users.getId()));
     }
 
     private Authentication authenticateUser(UsersDto requestUser) {
