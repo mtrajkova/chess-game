@@ -2,7 +2,9 @@ package com.project.chess.service.impl;
 
 import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.Piece;
+import com.github.bhlangonijr.chesslib.Side;
 import com.github.bhlangonijr.chesslib.Square;
+import com.github.bhlangonijr.chesslib.game.GameResult;
 import com.github.bhlangonijr.chesslib.move.*;
 import com.project.chess.exception.GameNotFoundException;
 import com.project.chess.model.Game;
@@ -10,6 +12,7 @@ import com.project.chess.model.State;
 import com.project.chess.model.Status;
 import com.project.chess.model.dto.MoveDto;
 import com.project.chess.model.dto.MoveResponseDto;
+import com.project.chess.model.Result;
 import com.project.chess.repository.GameRepository;
 import com.project.chess.service.PlayGameService;
 import org.springframework.stereotype.Service;
@@ -83,5 +86,15 @@ public class PlayGameServiceImpl implements PlayGameService {
         return movesHistoryPgn.toSan();
     }
 
+    private Result checkResult(Game game) {
 
+        Board board = getCurrentBoard(game);
+
+        if (board.isMated()) {
+            if (board.getSideToMove().equals(Side.BLACK)) {
+                return Result.WHITE_WON_CHECKMATE;
+            }
+        }
+        return null;
+    }
 }
