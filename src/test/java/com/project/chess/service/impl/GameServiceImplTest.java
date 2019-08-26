@@ -7,6 +7,7 @@ import com.project.chess.model.Status;
 import com.project.chess.model.Users;
 import com.project.chess.model.dto.MyGameDto;
 import com.project.chess.repository.GameRepository;
+import com.project.chess.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +33,9 @@ public class GameServiceImplTest {
 
     @Mock
     private GameRepository gameRepository;
+
+    @Mock
+    private UserRepository userRepository;
 
     @Mock
     private UserServiceImpl userService;
@@ -102,7 +106,7 @@ public class GameServiceImplTest {
 
     @Test
     public void getAllGamesByUser() {
-
+        when(userRepository.findById(user2.getId())).thenReturn(Optional.ofNullable(user2));
         when(gameRepository.findAllByPlayerOneIdOrPlayerTwoId(user2.getId(), user2.getId())).thenReturn(Stream.of(game1, game3).collect(Collectors.toList()));
         List<MyGameDto> foundGames = gameService.getAllGamesByUser(user2.getId());
         assertThat(foundGames.get(0).getOpponentName(),is(equalTo(game1.getPlayerOne().getDisplayName())));
